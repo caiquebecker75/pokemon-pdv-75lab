@@ -10,14 +10,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#08080e; --bg2:#0e0e18; --panel:#14141f; --panel2:#1b1b29;
-  --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
-  --ink:#f6f6fc; --muted:#a4a4bd; --muted2:#7a7a95;
-  --violet:#7c5cff; --violet2:#a488ff; --lime:#c8ff3d; --magenta:#ff2e88;
-  --cyan:#37e6ff; --amber:#ffb020; --green:#35e0a1;
-  --s1:#37e6ff; --s2:#7c5cff; --s3:#ff2e88; --s4:#ffb020; --s5:#c8ff3d; --s6:#35e0a1;
-  --shadow:0 30px 80px -30px rgba(0,0,0,.7);
-  --r:22px;
+  --bg:#0a0b09; --bg2:#0f110d; --panel:#161813; --panel2:#1d201a;
+  --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.15);
+  --ink:#f3f6ec; --muted:#a9af9f; --muted2:#767c6c;
+  --violet:#c2f53f; --violet2:#d6ff85; --lime:#c2f53f; --magenta:#e6ffa8;
+  --cyan:#9fe6c0; --amber:#bcd94a; --green:#78dd9e;
+  --s1:#9fe6c0; --s2:#c2f53f; --s3:#e6ffa8; --s4:#bcd94a; --s5:#c2f53f; --s6:#78dd9e;
+  --shadow:0 30px 80px -30px rgba(0,0,0,.75);
+  --r:20px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
@@ -28,13 +28,19 @@ body{
 }
 .font-d{font-family:'Space Grotesk','Inter',sans-serif;}
 
-/* ============ AURORA BG ============ */
-.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.aurora b{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;animation:float 22s ease-in-out infinite}
-.aurora b:nth-child(1){width:44vw;height:44vw;background:radial-gradient(circle,#5b3cff,transparent 70%);top:-12%;left:-8%}
-.aurora b:nth-child(2){width:38vw;height:38vw;background:radial-gradient(circle,#ff2e88,transparent 70%);bottom:-14%;right:-6%;animation-delay:-7s}
-.aurora b:nth-child(3){width:34vw;height:34vw;background:radial-gradient(circle,#37e6ff,transparent 70%);bottom:-10%;left:30%;animation-delay:-13s;opacity:.35}
-@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(6%,8%) scale(1.12)}66%{transform:translate(-5%,-4%) scale(.95)}}
+/* ============ BG · CURVAS + GLOW ============ */
+.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:
+   radial-gradient(1100px 700px at 82% -12%,rgba(194,245,63,.07),transparent 60%),
+   radial-gradient(900px 650px at 6% 112%,rgba(120,221,158,.05),transparent 60%);}
+.aurora .curves{position:absolute;top:50%;right:-14%;width:min(128vh,1300px);height:min(128vh,1300px);
+  transform:translateY(-50%);opacity:.55;animation:swirl 60s linear infinite;transform-origin:center}
+.aurora .curves.l{right:auto;left:-30%;top:15%;width:min(80vh,760px);height:min(80vh,760px);opacity:.4;animation-duration:80s;animation-direction:reverse}
+.aurora b{position:absolute;border-radius:50%;filter:blur(110px);opacity:.5;animation:float 24s ease-in-out infinite}
+.aurora b:nth-child(1){width:40vw;height:40vw;background:radial-gradient(circle,rgba(150,220,80,.5),transparent 70%);top:-14%;left:-10%}
+.aurora b:nth-child(2){width:32vw;height:32vw;background:radial-gradient(circle,rgba(120,221,158,.35),transparent 70%);bottom:-16%;right:-8%;animation-delay:-8s}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(4%,6%) scale(1.1)}}
+@keyframes swirl{to{transform:translateY(-50%) rotate(360deg)}}
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 
@@ -55,7 +61,7 @@ body{
 /* ============ TYPO ============ */
 .kicker{display:inline-flex;align-items:center;gap:9px;font-family:'Space Grotesk';font-weight:600;
   font-size:clamp(11px,1.15vw,13px);letter-spacing:.22em;text-transform:uppercase;color:var(--violet2);
-  padding:7px 15px;border:1px solid var(--line2);border-radius:100px;background:rgba(124,92,255,.08)}
+  padding:7px 15px;border:1px solid var(--line2);border-radius:100px;background:rgba(194,245,63,.08)}
 .kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime);animation:pulse 1.8s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
 h1.title{font-family:'Space Grotesk';font-weight:700;line-height:.98;letter-spacing:-.03em;
@@ -67,12 +73,27 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
 .grad2{background:linear-gradient(100deg,var(--magenta),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hl{color:var(--lime)} .hlv{color:var(--violet2)} .hlm{color:var(--magenta)} .hlc{color:var(--cyan)}
 
+/* ============ ASSINATURA (nav-pill · spark · ring) ============ */
+.navpill{display:inline-flex;align-items:center;gap:3px;padding:5px;border:1px solid var(--line2);border-radius:100px;background:rgba(22,24,19,.65);backdrop-filter:blur(8px)}
+.navpill a{font-size:12.5px;color:var(--muted);padding:8px 15px;border-radius:100px;font-weight:600;text-decoration:none;transition:.25s}
+.navpill a:hover{color:var(--ink)}
+.navpill a.act{background:rgba(255,255,255,.07);color:var(--ink)}
+.navpill .gs{background:var(--lime);color:#0a0b09;padding:9px 17px;border-radius:100px;font-weight:700;font-size:12.5px;font-family:'Space Grotesk';margin-left:4px}
+.navpill .mn{width:34px;height:34px;border-radius:100px;display:grid;place-items:center;background:rgba(255,255,255,.05);color:var(--ink)}
+.spark{display:inline-flex;color:var(--lime)}
+.spark svg{display:block;animation:twinkle 2.6s ease-in-out infinite}
+@keyframes twinkle{0%,100%{transform:scale(1) rotate(0);opacity:1}50%{transform:scale(.72) rotate(45deg);opacity:.65}}
+.ring{--p:70;width:var(--sz,96px);height:var(--sz,96px);border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--rc,var(--lime)) calc(var(--p)*1%),rgba(255,255,255,.07) 0);position:relative;flex:0 0 auto}
+.ring::after{content:'';position:absolute;inset:9px;border-radius:50%;background:var(--panel)}
+.ring b{position:relative;z-index:1;font-family:'Space Grotesk';font-weight:700;font-size:calc(var(--sz,96px)*.22);letter-spacing:-.02em}
+
 /* ============ COMPONENTS ============ */
 .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
   border-radius:var(--r);padding:clamp(18px,2vw,26px);position:relative;overflow:hidden;transition:.35s}
 .card:hover{border-color:var(--line2);transform:translateY(-4px)}
 .card .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:14px;
-  background:rgba(124,92,255,.12);border:1px solid var(--line2)}
+  background:rgba(194,245,63,.12);border:1px solid var(--line2)}
 .grid{display:grid;gap:clamp(12px,1.5vw,20px)}
 .g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)}
 .g4{grid-template-columns:repeat(4,1fr)} .g5{grid-template-columns:repeat(5,1fr)} .g6{grid-template-columns:repeat(6,1fr)}
@@ -93,9 +114,9 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
 /* chips */
 .chip{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:100px;font-size:13px;font-weight:600;
   border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--muted)}
-.chip.v{color:var(--violet2);border-color:rgba(124,92,255,.4);background:rgba(124,92,255,.1)}
-.chip.l{color:var(--lime);border-color:rgba(200,255,61,.35);background:rgba(200,255,61,.08)}
-.chip.m{color:var(--magenta);border-color:rgba(255,46,136,.35);background:rgba(255,46,136,.08)}
+.chip.v{color:var(--violet2);border-color:rgba(194,245,63,.4);background:rgba(194,245,63,.1)}
+.chip.l{color:var(--lime);border-color:rgba(194,245,63,.35);background:rgba(194,245,63,.08)}
+.chip.m{color:var(--magenta);border-color:rgba(222,255,120,.35);background:rgba(222,255,120,.08)}
 
 /* photo */
 .photo{border-radius:16px;overflow:hidden;border:1px solid var(--line2);position:relative;background:var(--panel);aspect-ratio:3/4}
@@ -137,7 +158,7 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
 .list{list-style:none;display:flex;flex-direction:column;gap:12px}
 .list li{display:flex;gap:12px;align-items:flex-start;color:var(--muted);font-size:clamp(14px,1.5vw,17px);line-height:1.45}
 .list li .b{flex:0 0 auto;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:13px;font-weight:700;
-  font-family:'Space Grotesk';background:rgba(124,92,255,.15);color:var(--violet2);border:1px solid var(--line2);margin-top:1px}
+  font-family:'Space Grotesk';background:rgba(194,245,63,.15);color:var(--violet2);border:1px solid var(--line2);margin-top:1px}
 .list li b{color:var(--ink)}
 
 /* journey */
@@ -175,12 +196,12 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
 .ph-slot{border:2px dashed var(--line2);border-radius:16px;min-height:150px;display:grid;place-items:center;text-align:center;
   background:repeating-linear-gradient(45deg,rgba(255,255,255,.015),rgba(255,255,255,.015) 12px,transparent 12px,transparent 24px);
   color:var(--muted2);transition:.3s;cursor:default}
-.ph-slot:hover{border-color:var(--violet);color:var(--violet2);background:rgba(124,92,255,.05)}
+.ph-slot:hover{border-color:var(--violet);color:var(--violet2);background:rgba(194,245,63,.05)}
 .ph-slot .pl{font-family:'Space Grotesk';font-weight:700;font-size:14px;letter-spacing:.05em}
 
 /* quadrant scatter */
 .scatter{position:relative;aspect-ratio:16/10;border:1px solid var(--line);border-radius:18px;background:
-  linear-gradient(rgba(124,92,255,.04),transparent);overflow:hidden}
+  linear-gradient(rgba(194,245,63,.04),transparent);overflow:hidden}
 .scatter .gl{position:absolute;background:var(--line)}
 .pt{position:absolute;translate:-50% 50%;display:flex;flex-direction:column;align-items:center;gap:4px}
 .pt .d{width:16px;height:16px;border-radius:50%;box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 22%,transparent)}
@@ -196,7 +217,27 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
 </style>
 </head>
 <body>
-<div class="aurora"><b></b><b></b><b></b></div>
+<div class="aurora">
+  <b></b><b></b>
+  <svg class="curves" viewBox="0 0 800 800" fill="none" aria-hidden="true">
+    <g stroke="rgba(255,255,255,.055)" stroke-width="1.4">
+      <ellipse cx="400" cy="400" rx="392" ry="330" transform="rotate(-18 400 400)"/>
+      <ellipse cx="424" cy="384" rx="316" ry="262" transform="rotate(-24 400 400)"/>
+      <ellipse cx="446" cy="368" rx="238" ry="196" transform="rotate(-30 400 400)"/>
+      <ellipse cx="466" cy="356" rx="162" ry="132" transform="rotate(-36 400 400)"/>
+    </g>
+    <g stroke="rgba(194,245,63,.10)" stroke-width="1.6">
+      <ellipse cx="410" cy="392" rx="356" ry="296" transform="rotate(-21 400 400)"/>
+    </g>
+  </svg>
+  <svg class="curves l" viewBox="0 0 800 800" fill="none" aria-hidden="true">
+    <g stroke="rgba(255,255,255,.045)" stroke-width="1.4">
+      <ellipse cx="400" cy="400" rx="360" ry="300" transform="rotate(14 400 400)"/>
+      <ellipse cx="400" cy="400" rx="270" ry="222" transform="rotate(20 400 400)"/>
+      <ellipse cx="400" cy="400" rx="180" ry="146" transform="rotate(26 400 400)"/>
+    </g>
+  </svg>
+</div>
 <div class="grain"></div>
 <div class="progress" id="prog"></div>
 
@@ -213,8 +254,16 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
 <!-- ============ 1 · CAPA ============ -->
 <section class="slide" style="justify-content:center;text-align:center">
   <div class="inner" style="max-width:1100px">
-    <div data-r style="--d:0"><span class="kicker"><span class="dot"></span> Análise de potencial em PDV · 2026</span></div>
-    <h1 class="title" data-r style="--d:1">Jornada do<br><span class="grad">Treinador Pokémon</span></h1>
+    <div data-r style="--d:0;display:flex;justify-content:center;margin-bottom:26px">
+      <nav class="navpill">
+        <a class="act">Diagnóstico</a><a>Segmentação</a><a>Plataforma</a><a>Rollout</a>
+        <span class="gs">Get Started</span>
+        <span class="mn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+      </nav>
+    </div>
+    <div data-r style="--d:1"><span class="kicker"><span class="dot"></span> Análise de potencial em PDV · 2026</span></div>
+    <div class="spark" data-r style="--d:2;justify-content:center;margin-bottom:6px"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 6.3 5.7 11.4 12 12-6.3.6-11.4 5.7-12 12-.6-6.3-5.7-11.4-12-12C6.3 11.4 11.4 6.3 12 0z"/></svg></div>
+    <h1 class="title" data-r style="--d:2">Jornada do<br><span class="grad">Treinador Pokémon</span></h1>
     <p class="sub" data-r style="--d:2;margin:0 auto 30px">Uma arquitetura modular de trade que transforma a presença de Pokémon no ponto de venda em uma <b style="color:var(--ink)">jornada de compra</b> — fácil de começar, divertida de descobrir e recorrente de colecionar.</p>
     <div data-r style="--d:3;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <span class="chip v">🎯 Visibilidade no PDV</span>
@@ -273,10 +322,10 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
     <h2 class="head" data-r style="--d:1">Um diagnóstico de campo por <span class="grad">evidência visual</span></h2>
     <p class="sub" data-r style="--d:2">Cada uma das 69 fotos foi lida por quatro perguntas — onde a marca aparece, o que o ambiente estimula, que barreira cria e qual solução destrava a conversão.</p>
     <div class="grid g4" data-r style="--d:3;margin-top:26px">
-      <div class="card"><div class="tag">01</div><div class="ic" style="background:rgba(55,230,255,.12)">👁️</div><h4 class="font-d" style="font-size:19px">Visibilidade</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Altura, blocagem de cor, testeira e presença em fluxo. Sem ela, o produto depende de busca ativa.</p></div>
-      <div class="card"><div class="tag">02</div><div class="ic" style="background:rgba(124,92,255,.12)">🧭</div><h4 class="font-d" style="font-size:19px">Navegação</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Clareza de categoria, preço e entrada para iniciante. O TCG precisa ser traduzido.</p></div>
-      <div class="card"><div class="tag">03</div><div class="ic" style="background:rgba(255,46,136,.12)">🎮</div><h4 class="font-d" style="font-size:19px">Experiência</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Mesa, mural, ritual, demo, QR. A criança responde a missão, não a exposição passiva.</p></div>
-      <div class="card"><div class="tag">04</div><div class="ic" style="background:rgba(200,255,61,.12)">💳</div><h4 class="font-d" style="font-size:19px">Conversão</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Impulso, cross-sell, balcão e checkout. Cada tipo de compra pede uma peça diferente.</p></div>
+      <div class="card"><div class="tag">01</div><div class="ic" style="background:rgba(143,224,184,.12)">👁️</div><h4 class="font-d" style="font-size:19px">Visibilidade</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Altura, blocagem de cor, testeira e presença em fluxo. Sem ela, o produto depende de busca ativa.</p></div>
+      <div class="card"><div class="tag">02</div><div class="ic" style="background:rgba(194,245,63,.12)">🧭</div><h4 class="font-d" style="font-size:19px">Navegação</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Clareza de categoria, preço e entrada para iniciante. O TCG precisa ser traduzido.</p></div>
+      <div class="card"><div class="tag">03</div><div class="ic" style="background:rgba(222,255,120,.12)">🎮</div><h4 class="font-d" style="font-size:19px">Experiência</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Mesa, mural, ritual, demo, QR. A criança responde a missão, não a exposição passiva.</p></div>
+      <div class="card"><div class="tag">04</div><div class="ic" style="background:rgba(194,245,63,.12)">💳</div><h4 class="font-d" style="font-size:19px">Conversão</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Impulso, cross-sell, balcão e checkout. Cada tipo de compra pede uma peça diferente.</p></div>
     </div>
   </div>
 </section>
@@ -398,10 +447,10 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
     <span class="kicker" data-r><span class="dot"></span> Público e comportamento de compra</span>
     <h2 class="head" data-r style="--d:1">A venda passa por <span class="grad">4 pessoas</span></h2>
     <div class="grid g4" data-r style="--d:2;margin-top:22px">
-      <div class="card" style="border-top:3px solid var(--s1)"><div class="ic" style="background:rgba(55,230,255,.12)">🧒</div><h4 class="font-d" style="font-size:17px">Criança iniciante</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> não sabe o que é booster ou como jogar.</p><div class="chip" style="font-size:11.5px">"Comece sua jornada. Abra, descubra e monte seu time."</div></div>
-      <div class="card" style="border-top:3px solid var(--s5)"><div class="ic" style="background:rgba(200,255,61,.12)">🎒</div><h4 class="font-d" style="font-size:17px">Criança fã</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> pode se perder na variedade de SKUs.</p><div class="chip" style="font-size:11.5px">"Escolha seu próximo desafio. Evolua sua coleção."</div></div>
-      <div class="card" style="border-top:3px solid var(--s2)"><div class="ic" style="background:rgba(124,92,255,.12)">🧑</div><h4 class="font-d" style="font-size:17px">Adulto comprador</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> não diferencia entrada, coleção e jogo.</p><div class="chip" style="font-size:11.5px">"Para começar / presentear / para quem já joga."</div></div>
-      <div class="card" style="border-top:3px solid var(--s3)"><div class="ic" style="background:rgba(255,46,136,.12)">🧑‍🏫</div><h4 class="font-d" style="font-size:17px">Vendedor</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> precisa traduzir o portfólio em segundos.</p><div class="chip" style="font-size:11.5px">"É para começar, colecionar, jogar ou presentear?"</div></div>
+      <div class="card" style="border-top:3px solid var(--s1)"><div class="ic" style="background:rgba(143,224,184,.12)">🧒</div><h4 class="font-d" style="font-size:17px">Criança iniciante</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> não sabe o que é booster ou como jogar.</p><div class="chip" style="font-size:11.5px">"Comece sua jornada. Abra, descubra e monte seu time."</div></div>
+      <div class="card" style="border-top:3px solid var(--s5)"><div class="ic" style="background:rgba(194,245,63,.12)">🎒</div><h4 class="font-d" style="font-size:17px">Criança fã</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> pode se perder na variedade de SKUs.</p><div class="chip" style="font-size:11.5px">"Escolha seu próximo desafio. Evolua sua coleção."</div></div>
+      <div class="card" style="border-top:3px solid var(--s2)"><div class="ic" style="background:rgba(194,245,63,.12)">🧑</div><h4 class="font-d" style="font-size:17px">Adulto comprador</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> não diferencia entrada, coleção e jogo.</p><div class="chip" style="font-size:11.5px">"Para começar / presentear / para quem já joga."</div></div>
+      <div class="card" style="border-top:3px solid var(--s3)"><div class="ic" style="background:rgba(222,255,120,.12)">🧑‍🏫</div><h4 class="font-d" style="font-size:17px">Vendedor</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> precisa traduzir o portfólio em segundos.</p><div class="chip" style="font-size:11.5px">"É para começar, colecionar, jogar ou presentear?"</div></div>
     </div>
   </div>
 </section>
@@ -423,7 +472,7 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
 </section>
 
 <!-- ============ 12 · A PLATAFORMA (HERO) ============ -->
-<section class="slide" style="background:radial-gradient(1200px 600px at 50% -10%,rgba(124,92,255,.14),transparent)">
+<section class="slide" style="background:radial-gradient(1200px 600px at 50% -10%,rgba(194,245,63,.14),transparent)">
   <div class="inner" style="max-width:1400px">
     <div style="text-align:center">
       <span class="kicker" data-r><span class="dot"></span> Plataforma estratégica recomendada</span>
@@ -452,11 +501,11 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
     <span class="kicker" data-r><span class="dot"></span> Módulos de solução</span>
     <h2 class="head" data-r style="--d:1">5 módulos <span class="grad">plugáveis por loja</span></h2>
     <div class="grid g5" data-r style="--d:2;margin-top:22px">
-      <div class="card" style="border-top:3px solid var(--s3)"><div class="ic" style="background:rgba(255,46,136,.12)">⚡</div><h4 class="font-d" style="font-size:16px">Impulso</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Papelaria, checkout, corredores. Clip strip, display de balcão, stopper.</p></div>
-      <div class="card" style="border-top:3px solid var(--s1)"><div class="ic" style="background:rgba(55,230,255,.12)">🎡</div><h4 class="font-d" style="font-size:16px">Experiência Infantil</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Ri Happy, brinquedo. Estação do Treinador, portal, floor decal, wobbler.</p></div>
-      <div class="card" style="border-top:3px solid var(--s2)"><div class="ic" style="background:rgba(124,92,255,.12)">🎓</div><h4 class="font-d" style="font-size:16px">Especialista / Comunidade</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Lojas TCG. Balcão do Professor, tapete demo, agenda, vitrine guiada.</p></div>
-      <div class="card" style="border-top:3px solid var(--s4)"><div class="ic" style="background:rgba(255,176,32,.12)">🧸</div><h4 class="font-d" style="font-size:16px">Licenciados + TCG</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Faixas de combo, shelftalker, selo "Leve seu parceiro para a batalha".</p></div>
-      <div class="card" style="border-top:3px solid var(--s5)"><div class="ic" style="background:rgba(200,255,61,.12)">💎</div><h4 class="font-d" style="font-size:16px">Premium / Launch</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Lojas-chave, lançamentos. Parede conceito, ilha, backdrop, opening station.</p></div>
+      <div class="card" style="border-top:3px solid var(--s3)"><div class="ic" style="background:rgba(222,255,120,.12)">⚡</div><h4 class="font-d" style="font-size:16px">Impulso</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Papelaria, checkout, corredores. Clip strip, display de balcão, stopper.</p></div>
+      <div class="card" style="border-top:3px solid var(--s1)"><div class="ic" style="background:rgba(143,224,184,.12)">🎡</div><h4 class="font-d" style="font-size:16px">Experiência Infantil</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Ri Happy, brinquedo. Estação do Treinador, portal, floor decal, wobbler.</p></div>
+      <div class="card" style="border-top:3px solid var(--s2)"><div class="ic" style="background:rgba(194,245,63,.12)">🎓</div><h4 class="font-d" style="font-size:16px">Especialista / Comunidade</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Lojas TCG. Balcão do Professor, tapete demo, agenda, vitrine guiada.</p></div>
+      <div class="card" style="border-top:3px solid var(--s4)"><div class="ic" style="background:rgba(183,214,63,.12)">🧸</div><h4 class="font-d" style="font-size:16px">Licenciados + TCG</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Faixas de combo, shelftalker, selo "Leve seu parceiro para a batalha".</p></div>
+      <div class="card" style="border-top:3px solid var(--s5)"><div class="ic" style="background:rgba(194,245,63,.12)">💎</div><h4 class="font-d" style="font-size:16px">Premium / Launch</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Lojas-chave, lançamentos. Parede conceito, ilha, backdrop, opening station.</p></div>
     </div>
   </div>
 </section>
@@ -507,12 +556,12 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
     <span class="kicker" data-r><span class="dot"></span> Dinâmicas de ativação</span>
     <h2 class="head" data-r style="--d:1">6 formas de <span class="grad">colocar em jogo</span></h2>
     <div class="grid g3" data-r style="--d:2;margin-top:20px">
-      <div class="card"><div class="ic" style="background:rgba(55,230,255,.12)">🎯</div><h4 class="font-d" style="font-size:16px">Missão Primeiro Treinador</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">QR / cartão de missão em 3 passos: escolher, abrir e jogar. <span class="hlc">Educação e trial.</span></p></div>
-      <div class="card"><div class="ic" style="background:rgba(255,46,136,.12)">🎁</div><h4 class="font-d" style="font-size:16px">Abertura da Sorte</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Espaço de abertura de booster no balcão, lógica de gashapon. <span class="hlm">Ritual e emoção.</span></p></div>
-      <div class="card"><div class="ic" style="background:rgba(124,92,255,.12)">🎓</div><h4 class="font-d" style="font-size:16px">Balcão do Professor</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Material para o vendedor orientar por perfil. <span class="hlv">Conversão consultiva.</span></p></div>
-      <div class="card"><div class="ic" style="background:rgba(255,176,32,.12)">🤝</div><h4 class="font-d" style="font-size:16px">Escolha seu Parceiro</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Pelúcia + booster, action figure + box. <span style="color:var(--amber)">Cross-sell e presente.</span></p></div>
-      <div class="card"><div class="ic" style="background:rgba(200,255,61,.12)">⚔️</div><h4 class="font-d" style="font-size:16px">Dia de Batalha</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Agenda semanal para aprender e jogar partidas rápidas. <span class="hl">Comunidade.</span></p></div>
-      <div class="card"><div class="ic" style="background:rgba(53,224,161,.12)">📚</div><h4 class="font-d" style="font-size:16px">Volta às Aulas</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Microimpulso em papelaria conectando booster a recompensa. <span style="color:var(--green)">Frequência.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(143,224,184,.12)">🎯</div><h4 class="font-d" style="font-size:16px">Missão Primeiro Treinador</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">QR / cartão de missão em 3 passos: escolher, abrir e jogar. <span class="hlc">Educação e trial.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(222,255,120,.12)">🎁</div><h4 class="font-d" style="font-size:16px">Abertura da Sorte</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Espaço de abertura de booster no balcão, lógica de gashapon. <span class="hlm">Ritual e emoção.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(194,245,63,.12)">🎓</div><h4 class="font-d" style="font-size:16px">Balcão do Professor</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Material para o vendedor orientar por perfil. <span class="hlv">Conversão consultiva.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(183,214,63,.12)">🤝</div><h4 class="font-d" style="font-size:16px">Escolha seu Parceiro</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Pelúcia + booster, action figure + box. <span style="color:var(--amber)">Cross-sell e presente.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(194,245,63,.12)">⚔️</div><h4 class="font-d" style="font-size:16px">Dia de Batalha</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Agenda semanal para aprender e jogar partidas rápidas. <span class="hl">Comunidade.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(120,221,158,.12)">📚</div><h4 class="font-d" style="font-size:16px">Volta às Aulas</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Microimpulso em papelaria conectando booster a recompensa. <span style="color:var(--green)">Frequência.</span></p></div>
     </div>
   </div>
 </section>
@@ -593,7 +642,7 @@ h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spac
 </section>
 
 <!-- ============ 20 · FECHAMENTO / PRÓXIMOS PASSOS ============ -->
-<section class="slide" style="justify-content:center;background:radial-gradient(1000px 500px at 50% 120%,rgba(124,92,255,.16),transparent)">
+<section class="slide" style="justify-content:center;background:radial-gradient(1000px 500px at 50% 120%,rgba(194,245,63,.16),transparent)">
   <div class="inner" style="text-align:center;max-width:1000px">
     <span class="kicker" data-r><span class="dot"></span> Recomendação final</span>
     <h1 class="title" data-r style="--d:1;font-size:clamp(30px,5.2vw,66px)">Modular, não uma<br><span class="grad">campanha única rígida</span></h1>
