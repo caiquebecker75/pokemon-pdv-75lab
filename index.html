@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Jornada do Treinador Pokémon · 75 LAB</title>
+<meta name="description" content="Análise de potencial em PDV para Pokémon — plataforma estratégica de trade por 75 LAB.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08080e; --bg2:#0e0e18; --panel:#14141f; --panel2:#1b1b29;
+  --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.16);
+  --ink:#f6f6fc; --muted:#a4a4bd; --muted2:#7a7a95;
+  --violet:#7c5cff; --violet2:#a488ff; --lime:#c8ff3d; --magenta:#ff2e88;
+  --cyan:#37e6ff; --amber:#ffb020; --green:#35e0a1;
+  --s1:#37e6ff; --s2:#7c5cff; --s3:#ff2e88; --s4:#ffb020; --s5:#c8ff3d; --s6:#35e0a1;
+  --shadow:0 30px 80px -30px rgba(0,0,0,.7);
+  --r:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  overflow:hidden; -webkit-font-smoothing:antialiased;
+}
+.font-d{font-family:'Space Grotesk','Inter',sans-serif;}
+
+/* ============ AURORA BG ============ */
+.aurora{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.aurora b{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;animation:float 22s ease-in-out infinite}
+.aurora b:nth-child(1){width:44vw;height:44vw;background:radial-gradient(circle,#5b3cff,transparent 70%);top:-12%;left:-8%}
+.aurora b:nth-child(2){width:38vw;height:38vw;background:radial-gradient(circle,#ff2e88,transparent 70%);bottom:-14%;right:-6%;animation-delay:-7s}
+.aurora b:nth-child(3){width:34vw;height:34vw;background:radial-gradient(circle,#37e6ff,transparent 70%);bottom:-10%;left:30%;animation-delay:-13s;opacity:.35}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(6%,8%) scale(1.12)}66%{transform:translate(-5%,-4%) scale(.95)}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+/* ============ DECK ============ */
+#deck{position:relative;z-index:2;height:100vh;width:100vw;overflow:hidden}
+.track{display:flex;height:100%;transition:transform .7s cubic-bezier(.7,0,.2,1);will-change:transform}
+.slide{min-width:100vw;height:100vh;flex:0 0 100vw;position:relative;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(24px,5vw,90px);overflow-y:auto;overflow-x:hidden}
+.slide::-webkit-scrollbar{width:0}
+.inner{width:100%;max-width:1280px;margin:0 auto}
+
+/* reveal */
+[data-r]{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.slide.on [data-r]{opacity:1;transform:none}
+.slide.on [data-r]{transition-delay:calc(var(--d,0)*90ms)}
+
+/* ============ TYPO ============ */
+.kicker{display:inline-flex;align-items:center;gap:9px;font-family:'Space Grotesk';font-weight:600;
+  font-size:clamp(11px,1.15vw,13px);letter-spacing:.22em;text-transform:uppercase;color:var(--violet2);
+  padding:7px 15px;border:1px solid var(--line2);border-radius:100px;background:rgba(124,92,255,.08)}
+.kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+h1.title{font-family:'Space Grotesk';font-weight:700;line-height:.98;letter-spacing:-.03em;
+  font-size:clamp(38px,7vw,96px);margin:.3em 0}
+h2.head{font-family:'Space Grotesk';font-weight:700;line-height:1.02;letter-spacing:-.025em;
+  font-size:clamp(28px,4.6vw,58px);margin:.25em 0 .4em}
+.sub{color:var(--muted);font-size:clamp(15px,1.7vw,21px);line-height:1.5;max-width:60ch}
+.grad{background:linear-gradient(100deg,var(--violet2),var(--cyan) 55%,var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad2{background:linear-gradient(100deg,var(--magenta),var(--amber));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hl{color:var(--lime)} .hlv{color:var(--violet2)} .hlm{color:var(--magenta)} .hlc{color:var(--cyan)}
+
+/* ============ COMPONENTS ============ */
+.card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
+  border-radius:var(--r);padding:clamp(18px,2vw,26px);position:relative;overflow:hidden;transition:.35s}
+.card:hover{border-color:var(--line2);transform:translateY(-4px)}
+.card .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:14px;
+  background:rgba(124,92,255,.12);border:1px solid var(--line2)}
+.grid{display:grid;gap:clamp(12px,1.5vw,20px)}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)} .g5{grid-template-columns:repeat(5,1fr)} .g6{grid-template-columns:repeat(6,1fr)}
+@media(max-width:900px){.g3,.g4,.g5,.g6{grid-template-columns:repeat(2,1fr)}.g2{grid-template-columns:1fr}}
+.eyebadge{font-family:'Space Grotesk';font-weight:700;font-size:13px;letter-spacing:.05em}
+
+/* big number */
+.bn{font-family:'Space Grotesk';font-weight:700;letter-spacing:-.04em;line-height:.85;
+  font-size:clamp(46px,7.5vw,104px)}
+.bn .u{font-size:.42em;color:var(--muted);letter-spacing:0}
+.bnlab{color:var(--muted);font-size:clamp(12px,1.3vw,15px);margin-top:8px;line-height:1.35}
+
+/* arrow */
+.arrow{display:inline-flex;align-items:center;color:var(--violet2)}
+.arrow svg{animation:nudge 1.6s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:100px;font-size:13px;font-weight:600;
+  border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--muted)}
+.chip.v{color:var(--violet2);border-color:rgba(124,92,255,.4);background:rgba(124,92,255,.1)}
+.chip.l{color:var(--lime);border-color:rgba(200,255,61,.35);background:rgba(200,255,61,.08)}
+.chip.m{color:var(--magenta);border-color:rgba(255,46,136,.35);background:rgba(255,46,136,.08)}
+
+/* photo */
+.photo{border-radius:16px;overflow:hidden;border:1px solid var(--line2);position:relative;background:var(--panel);aspect-ratio:3/4}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;transition:.6s}
+.photo:hover img{transform:scale(1.07)}
+.photo .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 12px 10px;font-size:12px;font-weight:600;
+  background:linear-gradient(transparent,rgba(0,0,0,.85))}
+
+/* ============ NAV UI ============ */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;
+  padding:18px clamp(20px,4vw,44px);pointer-events:none}
+.brand{display:flex;align-items:center;gap:11px;pointer-events:auto}
+.brand .logo{font-family:'Space Grotesk';font-weight:700;font-size:19px;letter-spacing:-.02em;
+  display:flex;align-items:center;gap:8px}
+.brand .logo b{background:var(--ink);color:var(--bg);padding:3px 8px;border-radius:8px;letter-spacing:-.04em}
+.brand .x{color:var(--muted2);font-weight:500}
+.brand .cli{color:var(--muted);font-weight:600;font-size:13px}
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--violet),var(--cyan),var(--lime));z-index:30;
+  width:0;transition:width .5s ease;box-shadow:0 0 14px var(--violet)}
+.counter{pointer-events:auto;font-family:'Space Grotesk';font-weight:600;font-size:14px;color:var(--muted);
+  background:rgba(20,20,31,.7);backdrop-filter:blur(10px);border:1px solid var(--line);padding:7px 13px;border-radius:100px}
+.counter b{color:var(--ink)}
+.nav{position:fixed;bottom:22px;right:clamp(20px,4vw,44px);z-index:20;display:flex;gap:10px}
+.nav button{width:50px;height:50px;border-radius:14px;border:1px solid var(--line2);background:rgba(20,20,31,.75);
+  backdrop-filter:blur(10px);color:var(--ink);cursor:pointer;display:grid;place-items:center;transition:.25s}
+.nav button:hover{background:var(--violet);border-color:var(--violet);transform:translateY(-3px)}
+.nav button:active{transform:scale(.94)}
+.dots{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:7px;
+  background:rgba(20,20,31,.6);backdrop-filter:blur(10px);padding:9px 13px;border-radius:100px;border:1px solid var(--line);max-width:80vw;flex-wrap:wrap;justify-content:center}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line2);cursor:pointer;transition:.3s}
+.dots i.a{background:var(--lime);width:24px;border-radius:4px;box-shadow:0 0 10px var(--lime)}
+.hint{position:fixed;bottom:26px;left:clamp(20px,4vw,44px);z-index:20;color:var(--muted2);font-size:12px;display:flex;align-items:center;gap:8px}
+.hint kbd{font-family:'Space Grotesk';border:1px solid var(--line2);border-radius:6px;padding:2px 7px;font-size:11px;background:var(--panel)}
+@media(max-width:720px){.hint,.brand .cli{display:none}.dots{display:none}}
+
+/* misc */
+.divline{height:1px;background:linear-gradient(90deg,var(--line2),transparent);margin:14px 0}
+.tag{position:absolute;top:16px;right:18px;font-family:'Space Grotesk';font-weight:700;font-size:44px;color:rgba(255,255,255,.06);letter-spacing:-.04em}
+.list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.list li{display:flex;gap:12px;align-items:flex-start;color:var(--muted);font-size:clamp(14px,1.5vw,17px);line-height:1.45}
+.list li .b{flex:0 0 auto;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:13px;font-weight:700;
+  font-family:'Space Grotesk';background:rgba(124,92,255,.15);color:var(--violet2);border:1px solid var(--line2);margin-top:1px}
+.list li b{color:var(--ink)}
+
+/* journey */
+.journey{display:flex;gap:10px;align-items:stretch;overflow-x:auto;padding-bottom:6px}
+.jstep{flex:1;min-width:150px;border-radius:18px;padding:20px 16px;position:relative;
+  background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-top:3px solid var(--c)}
+.jstep .n{font-family:'Space Grotesk';font-weight:700;font-size:13px;color:var(--c);letter-spacing:.1em}
+.jstep h4{font-family:'Space Grotesk';font-size:18px;margin:8px 0 6px;font-weight:700}
+.jstep p{font-size:12.5px;color:var(--muted);line-height:1.4}
+.jstep .jic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;margin-bottom:12px;
+  background:color-mix(in srgb,var(--c) 16%,transparent);border:1px solid color-mix(in srgb,var(--c) 40%,transparent)}
+.jarr{align-self:center;color:var(--muted2);flex:0 0 auto}
+@media(max-width:900px){.jarr{display:none}}
+
+/* matrix 2x2 */
+.matrix{position:relative;display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:14px}
+.qd{border-radius:18px;padding:20px;border:1px solid var(--line);background:linear-gradient(160deg,var(--panel),var(--panel2));min-height:150px}
+.qd .qh{font-family:'Space Grotesk';font-weight:700;font-size:15px;margin-bottom:4px}
+.qd .qs{font-size:12px;color:var(--muted);margin-bottom:12px}
+.axis-x{text-align:center;font-family:'Space Grotesk';font-weight:600;color:var(--muted);font-size:13px;letter-spacing:.15em;text-transform:uppercase;margin-top:12px}
+.axis-y{writing-mode:vertical-rl;transform:rotate(180deg);position:absolute;left:-34px;top:50%;translate:0 -50%;
+  font-family:'Space Grotesk';font-weight:600;color:var(--muted);font-size:13px;letter-spacing:.15em;text-transform:uppercase}
+
+/* timeline */
+.tl{display:flex;flex-direction:column;gap:0}
+.tlrow{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:13px 0;border-bottom:1px solid var(--line);align-items:center}
+.tlrow:last-child{border-bottom:0}
+.tlrow .dte{font-family:'Space Grotesk';font-weight:700;color:var(--cyan);font-size:14px}
+.tlrow .ph{font-weight:700;font-size:15px}
+.tlrow .de{color:var(--muted);font-size:13px}
+.tlbar{height:8px;border-radius:100px;background:var(--line);overflow:hidden;margin-top:6px}
+.tlbar i{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,var(--violet),var(--cyan));width:0;transition:width 1s ease}
+
+/* future placeholder */
+.ph-slot{border:2px dashed var(--line2);border-radius:16px;min-height:150px;display:grid;place-items:center;text-align:center;
+  background:repeating-linear-gradient(45deg,rgba(255,255,255,.015),rgba(255,255,255,.015) 12px,transparent 12px,transparent 24px);
+  color:var(--muted2);transition:.3s;cursor:default}
+.ph-slot:hover{border-color:var(--violet);color:var(--violet2);background:rgba(124,92,255,.05)}
+.ph-slot .pl{font-family:'Space Grotesk';font-weight:700;font-size:14px;letter-spacing:.05em}
+
+/* quadrant scatter */
+.scatter{position:relative;aspect-ratio:16/10;border:1px solid var(--line);border-radius:18px;background:
+  linear-gradient(rgba(124,92,255,.04),transparent);overflow:hidden}
+.scatter .gl{position:absolute;background:var(--line)}
+.pt{position:absolute;translate:-50% 50%;display:flex;flex-direction:column;align-items:center;gap:4px}
+.pt .d{width:16px;height:16px;border-radius:50%;box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 22%,transparent)}
+.pt .l{font-size:10.5px;font-weight:600;color:var(--ink);white-space:nowrap;background:rgba(8,8,14,.7);padding:2px 6px;border-radius:6px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.spin{animation:spin 14s linear infinite;transform-origin:center}
+.bob{animation:bob 3s ease-in-out infinite}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;pathLength:1}
+.slide.on .draw{animation:draw 1.4s ease forwards .3s}
+@keyframes draw{to{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<div class="aurora"><b></b><b></b><b></b></div>
+<div class="grain"></div>
+<div class="progress" id="prog"></div>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="logo"><b>75</b> LAB <span class="x">×</span> <span class="cli">The Pokémon Company</span></div>
+  </div>
+  <div class="counter"><b id="cnum">01</b> / <span id="ctot">20</span></div>
+</div>
+
+<div id="deck">
+<div class="track" id="track">
+
+<!-- ============ 1 · CAPA ============ -->
+<section class="slide" style="justify-content:center;text-align:center">
+  <div class="inner" style="max-width:1100px">
+    <div data-r style="--d:0"><span class="kicker"><span class="dot"></span> Análise de potencial em PDV · 2026</span></div>
+    <h1 class="title" data-r style="--d:1">Jornada do<br><span class="grad">Treinador Pokémon</span></h1>
+    <p class="sub" data-r style="--d:2;margin:0 auto 30px">Uma arquitetura modular de trade que transforma a presença de Pokémon no ponto de venda em uma <b style="color:var(--ink)">jornada de compra</b> — fácil de começar, divertida de descobrir e recorrente de colecionar.</p>
+    <div data-r style="--d:3;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <span class="chip v">🎯 Visibilidade no PDV</span>
+      <span class="chip l">🧒 Público 8–12 anos</span>
+      <span class="chip m">🃏 Pokémon TCG</span>
+      <span class="chip">🛒 Compra por impulso</span>
+    </div>
+    <div data-r style="--d:4;margin-top:44px;color:var(--muted2);font-size:13px;display:flex;gap:22px;justify-content:center;flex-wrap:wrap">
+      <span>Diagnóstico · Oportunidades · Plano de Soluções</span>
+      <span style="color:var(--violet2)">Apresentação estratégica 75 LAB</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2 · CONTEXTO / BIG NUMBERS ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> O ponto de partida</span>
+    <h2 class="head" data-r style="--d:1">Pokémon já tem <span class="grad">presença e desejo</span>.<br>Falta transformar isso em jornada.</h2>
+    <div class="grid g4" data-r style="--d:2;margin-top:26px">
+      <div class="card"><div class="bn hlc"><span data-count="69">0</span></div><div class="bnlab">registros fotográficos de campo analisados em lojas reais</div></div>
+      <div class="card"><div class="bn hlv"><span data-count="8">0</span>–<span data-count="12">0</span></div><div class="bnlab">a faixa de idade prioritária: crianças em plena descoberta</div></div>
+      <div class="card"><div class="bn hlm"><span data-count="3">0</span></div><div class="bnlab">públicos simultâneos: criança, adulto comprador e vendedor</div></div>
+      <div class="card"><div class="bn hl"><span data-count="6">0</span></div><div class="bnlab">etapas da jornada do treinador, do "começar" ao "colecionar"</div></div>
+    </div>
+    <div class="card" data-r style="--d:3;margin-top:18px;border-left:3px solid var(--lime)">
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <span class="eyebadge" style="color:var(--lime)">TESE CENTRAL</span>
+        <p style="font-size:clamp(15px,1.8vw,20px);line-height:1.4;flex:1;min-width:280px">O salto não é começar do zero — é dar <b class="hl">método, hierarquia e dinâmica</b> ao que já existe no ponto de venda.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 · DIAGNÓSTICO EM UMA FRASE ============ -->
+<section class="slide" style="text-align:center;justify-content:center">
+  <div class="inner" style="max-width:1050px">
+    <span class="kicker" data-r><span class="dot"></span> Diagnóstico em uma frase</span>
+    <h2 class="head" data-r style="--d:1;font-size:clamp(26px,4vw,50px);margin-top:20px">
+      A presença de Pokémon no PDV é <span class="hlc">reconhecível</span>,<br>
+      mas ainda não está organizada como uma<br>
+      <span class="grad2">jornada de compra</span> orientada.</h2>
+    <div class="grid g3" data-r style="--d:2;margin-top:30px">
+      <div class="card"><div class="ic">🔎</div><h4 class="font-d" style="font-size:18px;margin-bottom:6px">Produto visível, pouco explicado</h4><p style="color:var(--muted);font-size:14px">A criança nova e o adulto não entendem por onde começar.</p></div>
+      <div class="card"><div class="ic">🏷️</div><h4 class="font-d" style="font-size:18px;margin-bottom:6px">Presença sem hierarquia</h4><p style="color:var(--muted);font-size:14px">Boxes, boosters, decks e licenciados aparecem misturados.</p></div>
+      <div class="card"><div class="ic">⚔️</div><h4 class="font-d" style="font-size:18px;margin-bottom:6px">Concorrência por território</h4><p style="color:var(--muted);font-size:14px">Nerf, Funko, Copag e Lorcana já ocupam lógicas claras.</p></div>
+    </div>
+    <p class="sub" data-r style="--d:3;margin:26px auto 0">Deslocar o TCG de <span class="hlm">"produto disponível"</span> para <span class="hl">"experiência orientada"</span>: começar, escolher, descobrir, batalhar, colecionar e proteger.</p>
+  </div>
+</section>
+
+<!-- ============ 4 · MÉTODO (4 DIMENSÕES) ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Como as fotos foram lidas</span>
+    <h2 class="head" data-r style="--d:1">Um diagnóstico de campo por <span class="grad">evidência visual</span></h2>
+    <p class="sub" data-r style="--d:2">Cada uma das 69 fotos foi lida por quatro perguntas — onde a marca aparece, o que o ambiente estimula, que barreira cria e qual solução destrava a conversão.</p>
+    <div class="grid g4" data-r style="--d:3;margin-top:26px">
+      <div class="card"><div class="tag">01</div><div class="ic" style="background:rgba(55,230,255,.12)">👁️</div><h4 class="font-d" style="font-size:19px">Visibilidade</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Altura, blocagem de cor, testeira e presença em fluxo. Sem ela, o produto depende de busca ativa.</p></div>
+      <div class="card"><div class="tag">02</div><div class="ic" style="background:rgba(124,92,255,.12)">🧭</div><h4 class="font-d" style="font-size:19px">Navegação</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Clareza de categoria, preço e entrada para iniciante. O TCG precisa ser traduzido.</p></div>
+      <div class="card"><div class="tag">03</div><div class="ic" style="background:rgba(255,46,136,.12)">🎮</div><h4 class="font-d" style="font-size:19px">Experiência</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Mesa, mural, ritual, demo, QR. A criança responde a missão, não a exposição passiva.</p></div>
+      <div class="card"><div class="tag">04</div><div class="ic" style="background:rgba(200,255,61,.12)">💳</div><h4 class="font-d" style="font-size:19px">Conversão</h4><p style="color:var(--muted);font-size:13.5px;margin-top:6px">Impulso, cross-sell, balcão e checkout. Cada tipo de compra pede uma peça diferente.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5 · EVIDÊNCIAS (GALERIA) ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Evidências visuais de campo</span>
+    <h2 class="head" data-r style="--d:1">O que os <span class="grad">PDVs reais</span> mostram</h2>
+    <div class="grid g5" data-r style="--d:2;margin-top:20px">
+      <div class="photo"><img loading="lazy" src="assets/fotos/display_pokemon_1.jpg" alt="Display proprietário Pokémon"><div class="cap">Display proprietário · brinquedo</div></div>
+      <div class="photo"><img loading="lazy" src="assets/fotos/mural_pokemon.jpg" alt="Mural temático Pokémon"><div class="cap">Ambiente temático · fãs</div></div>
+      <div class="photo"><img loading="lazy" src="assets/fotos/especialista_curvo.jpg" alt="Balcão especialista"><div class="cap">Balcão curvo · especialista</div></div>
+      <div class="photo"><img loading="lazy" src="assets/fotos/papelaria_impulso.jpg" alt="Papelaria impulso"><div class="cap">Microimpulso · papelaria</div></div>
+      <div class="photo"><img loading="lazy" src="assets/fotos/bench_nerf.jpg" alt="Benchmark Nerf"><div class="cap">Benchmark · território Nerf</div></div>
+    </div>
+    <div class="grid g5" data-r style="--d:3;margin-top:14px">
+      <div class="card" style="grid-column:span 2;display:flex;align-items:center;gap:14px">
+        <div class="bn hl" style="font-size:clamp(38px,5vw,64px)"><span data-count="4">0</span></div>
+        <div class="bnlab" style="margin:0">pranchas de síntese revelam <b style="color:var(--ink)">padrões</b>: excesso de SKU, oportunidade de experiência, impulso e o balcão como motor de decisão.</div>
+      </div>
+      <div class="photo"><img loading="lazy" src="assets/fotos/rihappy_entrada.jpg" alt="Ri Happy"><div class="cap">Entrada de loja · Ri Happy</div></div>
+      <div class="photo"><img loading="lazy" src="assets/fotos/anime_akiba.jpg" alt="Loja anime"><div class="cap">Cultura geek · anime</div></div>
+      <div class="photo"><img loading="lazy" src="assets/fotos/vitrine_premium.jpg" alt="Vitrine premium"><div class="cap">Vitrine premium · cartas</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 · ACHADOS → RESPOSTA ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Sumário executivo</span>
+    <h2 class="head" data-r style="--d:1">5 achados centrais → <span class="grad">5 respostas</span></h2>
+    <div class="grid" data-r style="--d:2;grid-template-columns:1fr;gap:11px;margin-top:14px">
+      <div class="card" style="display:grid;grid-template-columns:1.1fr auto 1fr;gap:18px;align-items:center;padding:16px 22px">
+        <div><b style="font-family:'Space Grotesk'">Produto visível, mas pouco explicado</b><p style="color:var(--muted);font-size:13px">Não fica claro por onde começar.</p></div>
+        <span class="arrow"><svg width="34" height="16" viewBox="0 0 34 16" fill="none"><path d="M0 8h30m0 0l-7-6m7 6l-7 6" stroke="currentColor" stroke-width="2"/></svg></span>
+        <div><b class="hl" style="font-family:'Space Grotesk'">Sinalização por níveis</b><p style="color:var(--muted);font-size:13px">Comece Aqui · Booster · Coleção · Batalha · Presente.</p></div>
+      </div>
+      <div class="card" style="display:grid;grid-template-columns:1.1fr auto 1fr;gap:18px;align-items:center;padding:16px 22px">
+        <div><b style="font-family:'Space Grotesk'">Display proprietário sem jornada</b><p style="color:var(--muted);font-size:13px">Dá presença, mas não ensina nem ativa.</p></div>
+        <span class="arrow"><svg width="34" height="16" viewBox="0 0 34 16" fill="none"><path d="M0 8h30m0 0l-7-6m7 6l-7 6" stroke="currentColor" stroke-width="2"/></svg></span>
+        <div><b class="hl" style="font-family:'Space Grotesk'">Retrofit do display</b><p style="color:var(--muted);font-size:13px">Testeira, régua, QR, wobbler e hierarquia de SKUs.</p></div>
+      </div>
+      <div class="card" style="display:grid;grid-template-columns:1.1fr auto 1fr;gap:18px;align-items:center;padding:16px 22px">
+        <div><b style="font-family:'Space Grotesk'">Concorrentes fortes por território</b><p style="color:var(--muted);font-size:13px">Nerf, Funko, Copag e Lorcana.</p></div>
+        <span class="arrow"><svg width="34" height="16" viewBox="0 0 34 16" fill="none"><path d="M0 8h30m0 0l-7-6m7 6l-7 6" stroke="currentColor" stroke-width="2"/></svg></span>
+        <div><b class="hl" style="font-family:'Space Grotesk'">Território Pokémon por canal</b><p style="color:var(--muted);font-size:13px">Não apenas peças avulsas soltas.</p></div>
+      </div>
+      <div class="card" style="display:grid;grid-template-columns:1.1fr auto 1fr;gap:18px;align-items:center;padding:16px 22px">
+        <div><b style="font-family:'Space Grotesk'">Papelaria e checkout subaproveitados</b><p style="color:var(--muted);font-size:13px">Potencial de compra pequena e recorrente.</p></div>
+        <span class="arrow"><svg width="34" height="16" viewBox="0 0 34 16" fill="none"><path d="M0 8h30m0 0l-7-6m7 6l-7 6" stroke="currentColor" stroke-width="2"/></svg></span>
+        <div><b class="hl" style="font-family:'Space Grotesk'">Microdisplay + clip strip</b><p style="color:var(--muted);font-size:13px">Comunicação de "nova descoberta".</p></div>
+      </div>
+      <div class="card" style="display:grid;grid-template-columns:1.1fr auto 1fr;gap:18px;align-items:center;padding:16px 22px">
+        <div><b style="font-family:'Space Grotesk'">Loja especialista com excesso de opções</b><p style="color:var(--muted);font-size:13px">O atendimento vira ponto crítico de conversão.</p></div>
+        <span class="arrow"><svg width="34" height="16" viewBox="0 0 34 16" fill="none"><path d="M0 8h30m0 0l-7-6m7 6l-7 6" stroke="currentColor" stroke-width="2"/></svg></span>
+        <div><b class="hl" style="font-family:'Space Grotesk'">Balcão do Professor Pokémon</b><p style="color:var(--muted);font-size:13px">Guia, vitrine orientada e acessórios pós-compra.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7 · TENSÕES ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Diagnóstico estratégico</span>
+    <h2 class="head" data-r style="--d:1">As 5 tensões que o PDV precisa <span class="grad2">resolver</span></h2>
+    <div class="grid g5" data-r style="--d:2;margin-top:22px">
+      <div class="card" style="text-align:center"><div class="font-d hlc" style="font-size:15px;font-weight:700">Presença</div><div style="color:var(--muted2);font-size:12px;margin:6px 0">vs</div><div class="font-d hlm" style="font-size:15px;font-weight:700">Compreensão</div><p style="color:var(--muted);font-size:12px;margin-top:10px">É vista, mas nem sempre entendida rápido.</p></div>
+      <div class="card" style="text-align:center"><div class="font-d hlc" style="font-size:15px;font-weight:700">Colecionável</div><div style="color:var(--muted2);font-size:12px;margin:6px 0">vs</div><div class="font-d hlm" style="font-size:15px;font-weight:700">Jogável</div><p style="color:var(--muted);font-size:12px;margin-top:10px">Colecionar, jogar, presentear e começar.</p></div>
+      <div class="card" style="text-align:center"><div class="font-d hlc" style="font-size:15px;font-weight:700">Infantil</div><div style="color:var(--muted2);font-size:12px;margin:6px 0">vs</div><div class="font-d hlm" style="font-size:15px;font-weight:700">Especialista</div><p style="color:var(--muted);font-size:12px;margin-top:10px">Simplicidade × profundidade por canal.</p></div>
+      <div class="card" style="text-align:center"><div class="font-d hlc" style="font-size:15px;font-weight:700">Impulso</div><div style="color:var(--muted2);font-size:12px;margin:6px 0">vs</div><div class="font-d hlm" style="font-size:15px;font-weight:700">Decisão assistida</div><p style="color:var(--muted);font-size:12px;margin-top:10px">Autoatendimento × orientação do vendedor.</p></div>
+      <div class="card" style="text-align:center"><div class="font-d hlc" style="font-size:15px;font-weight:700">Produto</div><div style="color:var(--muted2);font-size:12px;margin:6px 0">vs</div><div class="font-d hlm" style="font-size:15px;font-weight:700">Experiência</div><p style="color:var(--muted);font-size:12px;margin-top:10px">Transformar abertura e batalha em ritual.</p></div>
+    </div>
+    <div class="card" data-r style="--d:3;margin-top:18px;border-left:3px solid var(--violet)">
+      <p style="font-size:clamp(15px,1.7vw,19px);line-height:1.4"><span class="eyebadge hlv">PROBLEMA CENTRAL &nbsp;</span> Como transformar a força visual e afetiva de Pokémon em uma jornada que ajude a <b class="hl">criança a desejar</b>, o <b class="hlc">adulto a escolher</b>, o <b class="hlm">vendedor a orientar</b> e a loja a vender mais?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8 · SEGMENTAÇÃO (MATRIZ 2x2 do PPTX) ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Clusterização de loja</span>
+    <h2 class="head" data-r style="--d:1">Segmentação de lojas: <span class="grad">2 eixos, 4 territórios</span></h2>
+    <p class="sub" data-r style="--d:2">Todo canal se posiciona entre <b class="hlc">comprar ↔ jogar</b> e <b class="hlv">generalista ↔ especialista</b>. Cada quadrante pede um kit de trade diferente.</p>
+    <div style="position:relative;padding-left:40px;margin-top:14px" data-r>
+      <span class="axis-y">← Comprar &nbsp;·&nbsp; Jogar →</span>
+      <div class="matrix" style="--d:3">
+        <div class="qd" style="border-top:3px solid var(--s2)"><div class="qh hlv">Especialista · Jogar</div><div class="qs">Comunidade, torneio e recorrência</div><div style="display:flex;gap:7px;flex-wrap:wrap"><span class="chip v">Arena Pokémon</span><span class="chip v">Maruru</span><span class="chip v">Epic</span><span class="chip v">Online · Liga</span></div></div>
+        <div class="qd" style="border-top:3px solid var(--s1)"><div class="qh hlc">Generalista · Jogar</div><div class="qs">Descoberta e primeira batalha</div><div style="display:flex;gap:7px;flex-wrap:wrap"><span class="chip">Ri Happy</span><span class="chip">PB Kids</span><span class="chip">Online · Batalha</span></div></div>
+        <div class="qd" style="border-top:3px solid var(--s3)"><div class="qh hlm">Especialista · Comprar</div><div class="qs">Coleção, vitrine e cartas premium</div><div style="display:flex;gap:7px;flex-wrap:wrap"><span class="chip m">Haikai</span><span class="chip m">Armarinhos Fernandes</span></div></div>
+        <div class="qd" style="border-top:3px solid var(--s5)"><div class="qh hl">Generalista · Comprar</div><div class="qs">Capilaridade, impulso e volume</div><div style="display:flex;gap:7px;flex-wrap:wrap"><span class="chip l">Kalunga</span><span class="chip l">Carrefour</span><span class="chip l">Online · Compra</span></div></div>
+      </div>
+      <div class="axis-x">← Generalista · Porta de entrada &nbsp;·&nbsp; Especialista →</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 9 · LEITURA POR CANAL ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Leitura por canal</span>
+    <h2 class="head" data-r style="--d:1">5 canais, 5 <span class="grad">missões de trade</span></h2>
+    <div class="grid g5" data-r style="--d:2;margin-top:20px">
+      <div class="card"><div class="photo" style="aspect-ratio:4/3;margin-bottom:12px"><img loading="lazy" src="assets/fotos/rihappy_entrada.jpg" alt=""></div><div class="chip l" style="margin-bottom:8px">Brinquedo · Ri Happy</div><p style="color:var(--muted);font-size:12.5px"><b style="color:var(--ink)">Desafio:</b> transformar em missão visual.<br><b class="hl">Estação do Treinador</b> + cross-sell.</p></div>
+      <div class="card"><div class="photo" style="aspect-ratio:4/3;margin-bottom:12px"><img loading="lazy" src="assets/fotos/papelaria_impulso.jpg" alt=""></div><div class="chip l" style="margin-bottom:8px">Papelaria</div><p style="color:var(--muted);font-size:12.5px"><b style="color:var(--ink)">Desafio:</b> leitura em segundos.<br><b class="hl">Clip strip</b> + display de balcão.</p></div>
+      <div class="card"><div class="photo" style="aspect-ratio:4/3;margin-bottom:12px"><img loading="lazy" src="assets/fotos/gondola_licenciada.jpg" alt=""></div><div class="chip" style="margin-bottom:8px">Varejo · gôndola</div><p style="color:var(--muted);font-size:12.5px"><b style="color:var(--ink)">Desafio:</b> hierarquia no ruído.<br><b class="hl">Régua + testeira</b> por nível.</p></div>
+      <div class="card"><div class="photo" style="aspect-ratio:4/3;margin-bottom:12px"><img loading="lazy" src="assets/fotos/anime_akiba.jpg" alt=""></div><div class="chip m" style="margin-bottom:8px">Geek · licenciados</div><p style="color:var(--muted);font-size:12.5px"><b style="color:var(--ink)">Desafio:</b> conectar personagem + jogo.<br><b class="hl">"Escolha seu parceiro"</b>.</p></div>
+      <div class="card"><div class="photo" style="aspect-ratio:4/3;margin-bottom:12px"><img loading="lazy" src="assets/fotos/especialista_balcao.jpg" alt=""></div><div class="chip v" style="margin-bottom:8px">Especialista · TCG</div><p style="color:var(--muted);font-size:12.5px"><b style="color:var(--ink)">Desafio:</b> atendimento consultivo.<br><b class="hl">Balcão do Professor</b> + demo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 · PÚBLICOS ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Público e comportamento de compra</span>
+    <h2 class="head" data-r style="--d:1">A venda passa por <span class="grad">4 pessoas</span></h2>
+    <div class="grid g4" data-r style="--d:2;margin-top:22px">
+      <div class="card" style="border-top:3px solid var(--s1)"><div class="ic" style="background:rgba(55,230,255,.12)">🧒</div><h4 class="font-d" style="font-size:17px">Criança iniciante</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> não sabe o que é booster ou como jogar.</p><div class="chip" style="font-size:11.5px">"Comece sua jornada. Abra, descubra e monte seu time."</div></div>
+      <div class="card" style="border-top:3px solid var(--s5)"><div class="ic" style="background:rgba(200,255,61,.12)">🎒</div><h4 class="font-d" style="font-size:17px">Criança fã</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> pode se perder na variedade de SKUs.</p><div class="chip" style="font-size:11.5px">"Escolha seu próximo desafio. Evolua sua coleção."</div></div>
+      <div class="card" style="border-top:3px solid var(--s2)"><div class="ic" style="background:rgba(124,92,255,.12)">🧑</div><h4 class="font-d" style="font-size:17px">Adulto comprador</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> não diferencia entrada, coleção e jogo.</p><div class="chip" style="font-size:11.5px">"Para começar / presentear / para quem já joga."</div></div>
+      <div class="card" style="border-top:3px solid var(--s3)"><div class="ic" style="background:rgba(255,46,136,.12)">🧑‍🏫</div><h4 class="font-d" style="font-size:17px">Vendedor</h4><p style="color:var(--muted);font-size:13px;margin:8px 0"><b style="color:var(--ink)">Barreira:</b> precisa traduzir o portfólio em segundos.</p><div class="chip" style="font-size:11.5px">"É para começar, colecionar, jogar ou presentear?"</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11 · BENCHMARK ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Benchmark competitivo</span>
+    <h2 class="head" data-r style="--d:1">O que a <span class="grad">concorrência ensina</span></h2>
+    <div class="grid g3" data-r style="--d:2;margin-top:22px">
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b class="font-d" style="font-size:18px">Nerf</b><span class="chip l" style="font-size:11px">Território</span></div><p style="color:var(--muted);font-size:13px;margin-top:8px">Constrói território de brincadeira e desafio → <b class="hl">Estação do Treinador</b> com missão e batalha.</p></div>
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b class="font-d" style="font-size:18px">Funko</b><span class="chip v" style="font-size:11px">Coleção</span></div><p style="color:var(--muted);font-size:13px;margin-top:8px">Organiza desejo por coleção e personagem → <b class="hl">"Escolha seu Pokémon"</b> e cross-sell.</p></div>
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b class="font-d" style="font-size:18px">Copag</b><span class="chip m" style="font-size:11px">Impulso</span></div><p style="color:var(--muted);font-size:13px;margin-top:8px">Impulso compacto em clip strip → levar <b class="hl">booster ao balcão</b> e checkout.</p></div>
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b class="font-d" style="font-size:18px">Lorcana</b><span class="chip v" style="font-size:11px">Categoria</span></div><p style="color:var(--muted);font-size:13px;margin-top:8px">Disputa território TCG com sinalização própria → <b class="hl">onboarding</b> de novos jogadores.</p></div>
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b class="font-d" style="font-size:18px">Gashapon</b><span class="chip m" style="font-size:11px">Ritual</span></div><p style="color:var(--muted);font-size:13px;margin-top:8px">Transforma surpresa em ritual físico → visibilidade para <b class="hl">abertura de booster</b>.</p></div>
+      <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b class="font-d" style="font-size:18px">Topps</b><span class="chip l" style="font-size:11px">Simples</span></div><p style="color:var(--muted);font-size:13px;margin-top:8px">Compra rápida e colecionismo simples → <b class="hl">simplificar a linguagem</b> do booster.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 12 · A PLATAFORMA (HERO) ============ -->
+<section class="slide" style="background:radial-gradient(1200px 600px at 50% -10%,rgba(124,92,255,.14),transparent)">
+  <div class="inner" style="max-width:1400px">
+    <div style="text-align:center">
+      <span class="kicker" data-r><span class="dot"></span> Plataforma estratégica recomendada</span>
+      <h2 class="head" data-r style="--d:1">A Jornada do Treinador em <span class="grad">6 etapas</span></h2>
+      <p class="sub" data-r style="--d:2;margin:0 auto 8px">Uma lógica <b class="hl">fixa</b> de navegação que recebe as artes de cada expansão. A jornada permanece; o visual se adapta.</p>
+    </div>
+    <div class="journey" data-r style="--d:3;margin-top:26px">
+      <div class="jstep" style="--c:var(--s1)"><div class="jic">🚀</div><div class="n">01</div><h4>Comece Aqui</h4><p>Seu primeiro passo como Treinador. Battle Academy, decks de entrada, QR tutorial.</p></div>
+      <span class="jarr">→</span>
+      <div class="jstep" style="--c:var(--s2)"><div class="jic">🤝</div><div class="n">02</div><h4>Escolha seu Pokémon</h4><p>Qual parceiro combina com você? Pelúcias, figures, Pokébolas.</p></div>
+      <span class="jarr">→</span>
+      <div class="jstep" style="--c:var(--s3)"><div class="jic">✨</div><div class="n">03</div><h4>Abra uma Descoberta</h4><p>Sua próxima carta pode estar aqui. Booster, clip strip, checkout.</p></div>
+      <span class="jarr">→</span>
+      <div class="jstep" style="--c:var(--s4)"><div class="jic">🗂️</div><div class="n">04</div><h4>Monte seu Time</h4><p>Colecione, troque e evolua. Boxes, coleções, pastas, sleeves.</p></div>
+      <span class="jarr">→</span>
+      <div class="jstep" style="--c:var(--s5)"><div class="jic">⚔️</div><div class="n">05</div><h4>Batalhe com Amigos</h4><p>Aprenda, desafie e jogue. Mesa demo, tapete, agenda de batalhas.</p></div>
+      <span class="jarr">→</span>
+      <div class="jstep" style="--c:var(--s6)"><div class="jic">🛡️</div><div class="n">06</div><h4>Proteja sua Coleção</h4><p>Cartas especiais merecem proteção. Sleeves, top loaders, vitrine premium.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 13 · MÓDULOS ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Módulos de solução</span>
+    <h2 class="head" data-r style="--d:1">5 módulos <span class="grad">plugáveis por loja</span></h2>
+    <div class="grid g5" data-r style="--d:2;margin-top:22px">
+      <div class="card" style="border-top:3px solid var(--s3)"><div class="ic" style="background:rgba(255,46,136,.12)">⚡</div><h4 class="font-d" style="font-size:16px">Impulso</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Papelaria, checkout, corredores. Clip strip, display de balcão, stopper.</p></div>
+      <div class="card" style="border-top:3px solid var(--s1)"><div class="ic" style="background:rgba(55,230,255,.12)">🎡</div><h4 class="font-d" style="font-size:16px">Experiência Infantil</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Ri Happy, brinquedo. Estação do Treinador, portal, floor decal, wobbler.</p></div>
+      <div class="card" style="border-top:3px solid var(--s2)"><div class="ic" style="background:rgba(124,92,255,.12)">🎓</div><h4 class="font-d" style="font-size:16px">Especialista / Comunidade</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Lojas TCG. Balcão do Professor, tapete demo, agenda, vitrine guiada.</p></div>
+      <div class="card" style="border-top:3px solid var(--s4)"><div class="ic" style="background:rgba(255,176,32,.12)">🧸</div><h4 class="font-d" style="font-size:16px">Licenciados + TCG</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Faixas de combo, shelftalker, selo "Leve seu parceiro para a batalha".</p></div>
+      <div class="card" style="border-top:3px solid var(--s5)"><div class="ic" style="background:rgba(200,255,61,.12)">💎</div><h4 class="font-d" style="font-size:16px">Premium / Launch</h4><p style="color:var(--muted);font-size:12.5px;margin-top:6px">Lojas-chave, lançamentos. Parede conceito, ilha, backdrop, opening station.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 14 · OPORTUNIDADES PRIORIZADAS ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Oportunidades priorizadas</span>
+    <h2 class="head" data-r style="--d:1">A ordem de <span class="grad2">ataque</span></h2>
+    <div class="grid" data-r style="--d:2;grid-template-columns:1fr;gap:10px;margin-top:14px">
+      <div class="card" style="display:flex;align-items:center;gap:20px;padding:14px 22px"><div class="bn hlv" style="font-size:44px;min-width:60px">1</div><div style="flex:1"><b class="font-d">Régua de navegação por nível de entrada</b><p style="color:var(--muted);font-size:13px">Resolve o problema estrutural mais recorrente: excesso de SKUs sem hierarquia.</p></div><span class="chip l">Impacto alto</span></div>
+      <div class="card" style="display:flex;align-items:center;gap:20px;padding:14px 22px"><div class="bn hlv" style="font-size:44px;min-width:60px">2</div><div style="flex:1"><b class="font-d">Retrofit do display proprietário</b><p style="color:var(--muted);font-size:13px">Aproveita investimento existente e transforma a estrutura em jornada.</p></div><span class="chip l">Rápido</span></div>
+      <div class="card" style="display:flex;align-items:center;gap:20px;padding:14px 22px"><div class="bn hlv" style="font-size:44px;min-width:60px">3</div><div style="flex:1"><b class="font-d">Microimpulso para papelaria / checkout</b><p style="color:var(--muted);font-size:13px">Alta capilaridade e baixo custo por ponto.</p></div><span class="chip l">Capilar</span></div>
+      <div class="card" style="display:flex;align-items:center;gap:20px;padding:14px 22px"><div class="bn hlv" style="font-size:44px;min-width:60px">4</div><div style="flex:1"><b class="font-d">Estação do Treinador (loja de brinquedo)</b><p style="color:var(--muted);font-size:13px">Conecta marca, brincadeira e presente. Aumenta cross-sell.</p></div><span class="chip m">Experiência</span></div>
+      <div class="card" style="display:flex;align-items:center;gap:20px;padding:14px 22px"><div class="bn hlv" style="font-size:44px;min-width:60px">5</div><div style="flex:1"><b class="font-d">Balcão do Professor Pokémon (especialistas)</b><p style="color:var(--muted);font-size:13px">Qualifica atendimento, aumenta ticket e fortalece comunidade.</p></div><span class="chip v">Ticket</span></div>
+      <div class="card" style="display:flex;align-items:center;gap:20px;padding:14px 22px"><div class="bn hlv" style="font-size:44px;min-width:60px">6</div><div style="flex:1"><b class="font-d">Cross-sell TCG + licenciados</b><p style="color:var(--muted);font-size:13px">Eleva ticket médio e conecta personagem com jogo.</p></div><span class="chip v">Ticket</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 15 · PLANO DE PEÇAS + ESPAÇO FUTURO ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Plano de peças · cotação em camadas</span>
+    <h2 class="head" data-r style="--d:1">5 camadas de <span class="grad">comunicação</span></h2>
+    <div class="grid g5" data-r style="--d:2;margin-top:18px">
+      <div class="card"><div class="chip l" style="margin-bottom:10px">Essencial</div><ul class="list" style="gap:6px"><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Régua de gôndola</li><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Stopper + wobbler</li><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>QR tutorial + mini guia</li></ul></div>
+      <div class="card"><div class="chip m" style="margin-bottom:10px">Impulso</div><ul class="list" style="gap:6px"><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Clip strip</li><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Display de balcão</li><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Splash de booster</li></ul></div>
+      <div class="card"><div class="chip v" style="margin-bottom:10px">Experiência</div><ul class="list" style="gap:6px"><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Estação do Treinador</li><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Floor decal + totem</li><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Mesa / tapete demo</li></ul></div>
+      <div class="card"><div class="chip" style="margin-bottom:10px">Cross-sell</div><ul class="list" style="gap:6px"><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Faixa TCG + licenciado</li><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Shelftalker de combo</li><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Cubos de personagem</li></ul></div>
+      <div class="card"><div class="chip l" style="margin-bottom:10px">Premium</div><ul class="list" style="gap:6px"><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Parede conceito</li><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Portal + backdrop</li><li style="font-size:12px"><span class="b" style="width:6px;height:6px;padding:0;margin-top:8px"></span>Ilha + vitrine</li></ul></div>
+    </div>
+    <div style="margin-top:20px" data-r>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span class="eyebadge hlv">🎨 ESPAÇO RESERVADO</span><span style="color:var(--muted);font-size:13px">— mockups das peças entram aqui assim que forem enviados</span></div>
+      <div class="grid g4" style="--d:3">
+        <div class="ph-slot"><div><div style="font-size:28px;margin-bottom:6px">＋</div><div class="pl">PEÇA EM BREVE</div><div style="font-size:11px;margin-top:4px">arte / mockup</div></div></div>
+        <div class="ph-slot"><div><div style="font-size:28px;margin-bottom:6px">＋</div><div class="pl">PEÇA EM BREVE</div><div style="font-size:11px;margin-top:4px">arte / mockup</div></div></div>
+        <div class="ph-slot"><div><div style="font-size:28px;margin-bottom:6px">＋</div><div class="pl">PEÇA EM BREVE</div><div style="font-size:11px;margin-top:4px">arte / mockup</div></div></div>
+        <div class="ph-slot"><div><div style="font-size:28px;margin-bottom:6px">＋</div><div class="pl">PEÇA EM BREVE</div><div style="font-size:11px;margin-top:4px">arte / mockup</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 16 · DINÂMICAS ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Dinâmicas de ativação</span>
+    <h2 class="head" data-r style="--d:1">6 formas de <span class="grad">colocar em jogo</span></h2>
+    <div class="grid g3" data-r style="--d:2;margin-top:20px">
+      <div class="card"><div class="ic" style="background:rgba(55,230,255,.12)">🎯</div><h4 class="font-d" style="font-size:16px">Missão Primeiro Treinador</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">QR / cartão de missão em 3 passos: escolher, abrir e jogar. <span class="hlc">Educação e trial.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(255,46,136,.12)">🎁</div><h4 class="font-d" style="font-size:16px">Abertura da Sorte</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Espaço de abertura de booster no balcão, lógica de gashapon. <span class="hlm">Ritual e emoção.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(124,92,255,.12)">🎓</div><h4 class="font-d" style="font-size:16px">Balcão do Professor</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Material para o vendedor orientar por perfil. <span class="hlv">Conversão consultiva.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(255,176,32,.12)">🤝</div><h4 class="font-d" style="font-size:16px">Escolha seu Parceiro</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Pelúcia + booster, action figure + box. <span style="color:var(--amber)">Cross-sell e presente.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(200,255,61,.12)">⚔️</div><h4 class="font-d" style="font-size:16px">Dia de Batalha</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Agenda semanal para aprender e jogar partidas rápidas. <span class="hl">Comunidade.</span></p></div>
+      <div class="card"><div class="ic" style="background:rgba(53,224,161,.12)">📚</div><h4 class="font-d" style="font-size:16px">Volta às Aulas</h4><p style="color:var(--muted);font-size:13px;margin-top:6px">Microimpulso em papelaria conectando booster a recompensa. <span style="color:var(--green)">Frequência.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 17 · PLANOGRAMA (ESCADA) ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Planograma · escada de decisão</span>
+    <h2 class="head" data-r style="--d:1">Cada altura, um <span class="grad">público</span></h2>
+    <div class="grid" data-r style="--d:2;grid-template-columns:1fr;gap:8px;margin-top:16px;max-width:920px">
+      <div class="card" style="display:flex;gap:16px;align-items:center;padding:13px 20px;border-left:3px solid var(--s5)"><span style="font-size:24px">👑</span><div><b class="font-d">Topo — testeira e personagem</b><p style="color:var(--muted);font-size:12.5px">Mensagem de jornada, visível de longe.</p></div></div>
+      <div class="card" style="display:flex;gap:16px;align-items:center;padding:13px 20px;border-left:3px solid var(--s1)"><span style="font-size:24px">🧒</span><div><b class="font-d">Olhos da criança — boosters e entrada</b><p style="color:var(--muted);font-size:12.5px">Produtos de entrada e chamada de descoberta.</p></div></div>
+      <div class="card" style="display:flex;gap:16px;align-items:center;padding:13px 20px;border-left:3px solid var(--s2)"><span style="font-size:24px">🧑</span><div><b class="font-d">Olhos do adulto — guia de compra</b><p style="color:var(--muted);font-size:12.5px">Diferenciação por perfil e produtos presenteáveis.</p></div></div>
+      <div class="card" style="display:flex;gap:16px;align-items:center;padding:13px 20px;border-left:3px solid var(--s4)"><span style="font-size:24px">📦</span><div><b class="font-d">Base — boxes e coleções especiais</b><p style="color:var(--muted);font-size:12.5px">SKUs de maior volume.</p></div></div>
+      <div class="card" style="display:flex;gap:16px;align-items:center;padding:13px 20px;border-left:3px solid var(--s3)"><span style="font-size:24px">💎</span><div><b class="font-d">Balcão / vitrine — premium e acessórios</b><p style="color:var(--muted);font-size:12.5px">Cartas especiais, sleeves, pastas e material consultivo.</p></div></div>
+    </div>
+    <div class="card" data-r style="--d:3;margin-top:14px;border-left:3px solid var(--magenta);max-width:920px">
+      <p style="font-size:14px"><span class="eyebadge hlm">⚠️ CORREÇÃO TÁTICA IMEDIATA</span> &nbsp;Nunca colocar etiqueta de preço sobre personagem ou logo. Usar <b class="hl">porta-preço externo</b>, régua de preço ou tag suspensa padronizada.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 18 · MATRIZ DE PRIORIZAÇÃO (QUADRANTE) ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Matriz de priorização para cotação</span>
+    <h2 class="head" data-r style="--d:1">Impacto <span class="hlc">×</span> Complexidade</h2>
+    <div data-r style="--d:2;margin-top:14px;max-width:900px">
+      <div class="scatter" id="scatter">
+        <div class="gl" style="left:50%;top:0;bottom:0;width:1px"></div>
+        <div class="gl" style="top:50%;left:0;right:0;height:1px"></div>
+        <span style="position:absolute;left:12px;top:10px;font-size:11px;color:var(--muted2);font-family:'Space Grotesk';font-weight:600">↑ ALTO IMPACTO · baixa complexidade — <b class="hl">FAÇA JÁ</b></span>
+        <span style="position:absolute;right:12px;top:10px;font-size:11px;color:var(--muted2);font-family:'Space Grotesk';font-weight:600">ALTO IMPACTO · alta complexidade — <b class="hlv">PILOTO</b></span>
+        <span style="position:absolute;left:12px;bottom:10px;font-size:11px;color:var(--muted2)">baixo impacto · fácil</span>
+        <span style="position:absolute;right:12px;bottom:10px;font-size:11px;color:var(--muted2)">baixo impacto · difícil — opcional</span>
+        <div class="pt" style="--c:var(--lime);left:18%;top:16%"><span class="d" style="background:var(--lime)"></span><span class="l">Régua de gôndola</span></div>
+        <div class="pt" style="--c:var(--lime);left:30%;top:26%"><span class="d" style="background:var(--lime)"></span><span class="l">Clip strip</span></div>
+        <div class="pt" style="--c:var(--lime);left:24%;top:34%"><span class="d" style="background:var(--lime)"></span><span class="l">Mini guia</span></div>
+        <div class="pt" style="--c:var(--cyan);left:40%;top:22%"><span class="d" style="background:var(--cyan)"></span><span class="l">Display balcão</span></div>
+        <div class="pt" style="--c:var(--amber);left:38%;top:52%"><span class="d" style="background:var(--amber)"></span><span class="l">Porta-preço externo</span></div>
+        <div class="pt" style="--c:var(--violet2);left:70%;top:20%"><span class="d" style="background:var(--violet2)"></span><span class="l">Estação do Treinador</span></div>
+        <div class="pt" style="--c:var(--violet2);left:64%;top:34%"><span class="d" style="background:var(--violet2)"></span><span class="l">Tapete demo</span></div>
+        <div class="pt" style="--c:var(--magenta);left:80%;top:26%"><span class="d" style="background:var(--magenta)"></span><span class="l">Parede conceito</span></div>
+        <div class="pt" style="--c:var(--muted);left:76%;top:60%"><span class="d" style="background:var(--muted)"></span><span class="l">Portal / backdrop</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 19 · CRONOGRAMA + KPIs ============ -->
+<section class="slide">
+  <div class="inner">
+    <span class="kicker" data-r><span class="dot"></span> Cronograma de trabalho · KPIs</span>
+    <h2 class="head" data-r style="--d:1">De <span class="hlc">diagnóstico</span> a <span class="grad">rollout</span></h2>
+    <div class="grid" style="grid-template-columns:1.3fr 1fr;gap:26px;align-items:start">
+      <div class="tl" data-r style="--d:2">
+        <div class="tlrow"><div class="dte">29/06–05/07</div><div><div class="ph">Diagnóstico e estratégia</div><div class="tlbar"><i style="--w:100%"></i></div></div></div>
+        <div class="tlrow"><div class="dte">06–12/07</div><div><div class="ph">Dinâmica e desenho de peças</div><div class="tlbar"><i style="--w:88%"></i></div></div></div>
+        <div class="tlrow"><div class="dte">13–26/07</div><div><div class="ph">Criação e desdobramentos</div><div class="tlbar"><i style="--w:74%"></i></div></div></div>
+        <div class="tlrow"><div class="dte">27/07–16/08</div><div><div class="ph">Prototipagem e orçamento</div><div class="tlbar"><i style="--w:58%"></i></div></div></div>
+        <div class="tlrow"><div class="dte">17/08–13/09</div><div><div class="ph">Produção</div><div class="tlbar"><i style="--w:40%"></i></div></div></div>
+        <div class="tlrow"><div class="dte">14–30/09</div><div><div class="ph">Piloto e ajustes</div><div class="tlbar"><i style="--w:24%"></i></div></div></div>
+        <div class="tlrow"><div class="dte hl">01/10</div><div><div class="ph">Entrega final · decisão de escala</div><div class="tlbar"><i style="--w:12%;background:linear-gradient(90deg,var(--lime),var(--green))"></i></div></div></div>
+      </div>
+      <div data-r style="--d:3">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span class="eyebadge hlv">KPIs QUE VÃO MEDIR</span></div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px">
+          <div class="card" style="padding:14px"><div class="font-d hl" style="font-size:14px">👁️ Visibilidade</div><p style="color:var(--muted);font-size:12px;margin-top:4px">Aderência de execução</p></div>
+          <div class="card" style="padding:14px"><div class="font-d hlc" style="font-size:14px">⚡ Impulso</div><p style="color:var(--muted);font-size:12px;margin-top:4px">Giro de boosters</p></div>
+          <div class="card" style="padding:14px"><div class="font-d hlv" style="font-size:14px">📱 Educação</div><p style="color:var(--muted);font-size:12px;margin-top:4px">Leitura de QR/tutorial</p></div>
+          <div class="card" style="padding:14px"><div class="font-d hlm" style="font-size:14px">🔗 Cross-sell</div><p style="color:var(--muted);font-size:12px;margin-top:4px">Attach rate + licenciado</p></div>
+          <div class="card" style="padding:14px"><div class="font-d" style="font-size:14px;color:var(--amber)">🎫 Comunidade</div><p style="color:var(--muted);font-size:12px;margin-top:4px">Participação em demos</p></div>
+          <div class="card" style="padding:14px"><div class="font-d" style="font-size:14px;color:var(--green)">💰 Ticket</div><p style="color:var(--muted);font-size:12px;margin-top:4px">Ticket médio TCG</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 20 · FECHAMENTO / PRÓXIMOS PASSOS ============ -->
+<section class="slide" style="justify-content:center;background:radial-gradient(1000px 500px at 50% 120%,rgba(124,92,255,.16),transparent)">
+  <div class="inner" style="text-align:center;max-width:1000px">
+    <span class="kicker" data-r><span class="dot"></span> Recomendação final</span>
+    <h1 class="title" data-r style="--d:1;font-size:clamp(30px,5.2vw,66px)">Modular, não uma<br><span class="grad">campanha única rígida</span></h1>
+    <p class="sub" data-r style="--d:2;margin:0 auto 26px">Começar por um <b class="hl">pacote essencial</b> de rápida implementação e, em paralelo, um <b class="hlc">piloto de experiência</b> em lojas-chave. Escala e aprendizado ao mesmo tempo.</p>
+    <div class="grid g4" data-r style="--d:3;margin-bottom:26px">
+      <div class="card" style="padding:16px"><div class="font-d hlv" style="font-size:13px">PRÓXIMO 01</div><p style="font-size:13px;margin-top:6px">Validar SKUs de entrada, presente, coleção, batalha e premium.</p></div>
+      <div class="card" style="padding:16px"><div class="font-d hlv" style="font-size:13px">PRÓXIMO 02</div><p style="font-size:13px;margin-top:6px">Definir lojas piloto por canal.</p></div>
+      <div class="card" style="padding:16px"><div class="font-d hlv" style="font-size:13px">PRÓXIMO 03</div><p style="font-size:13px;margin-top:6px">Levantar medidas reais de display e gôndola.</p></div>
+      <div class="card" style="padding:16px"><div class="font-d hlv" style="font-size:13px">PRÓXIMO 04</div><p style="font-size:13px;margin-top:6px">Cotar pacotes essencial, experiência e especialista.</p></div>
+    </div>
+    <div data-r style="--d:4;display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;color:var(--muted2);font-size:13px">
+      <span class="logo font-d" style="font-weight:700;font-size:18px;color:var(--ink)"><b style="background:var(--ink);color:var(--bg);padding:3px 8px;border-radius:8px">75</b> LAB</span>
+      <span>·  transformando presença em jornada  ·</span>
+      <span class="hlv">Vamos jogar? 🎮</span>
+    </div>
+  </div>
+</section>
+
+</div><!-- /track -->
+</div><!-- /deck -->
+
+<div class="nav">
+  <button id="prev" aria-label="Anterior"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button id="next" aria-label="Próximo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+</div>
+<div class="dots" id="dots"></div>
+<div class="hint"><kbd>←</kbd><kbd>→</kbd> navegar · <kbd>F</kbd> tela cheia</div>
+
+<script>
+(function(){
+  const track=document.getElementById('track');
+  const slides=[...document.querySelectorAll('.slide')];
+  const total=slides.length;
+  let i=0, lock=false;
+  document.getElementById('ctot').textContent=String(total).padStart(2,'0');
+
+  // dots
+  const dots=document.getElementById('dots');
+  slides.forEach((_,k)=>{const d=document.createElement('i');d.onclick=()=>go(k);dots.appendChild(d)});
+  const dotEls=[...dots.children];
+
+  function counters(sl){
+    sl.querySelectorAll('[data-count]').forEach(el=>{
+      const end=+el.dataset.count; const dur=1100; const t0=performance.now();
+      function step(t){const p=Math.min(1,(t-t0)/dur);const e=1-Math.pow(1-p,3);
+        el.textContent=Math.round(end*e);if(p<1)requestAnimationFrame(step);}
+      requestAnimationFrame(step);
+    });
+    // timeline bars
+    sl.querySelectorAll('.tlbar i').forEach(b=>{b.style.width=b.style.getPropertyValue('--w')||'0'});
+  }
+
+  function render(){
+    track.style.transform='translateX('+(-i*100)+'vw)';
+    document.getElementById('cnum').textContent=String(i+1).padStart(2,'0');
+    document.getElementById('prog').style.width=((i+1)/total*100)+'%';
+    dotEls.forEach((d,k)=>d.classList.toggle('a',k===i));
+    slides.forEach((s,k)=>{
+      if(k===i){s.classList.add('on'); if(!s.dataset.seen){s.dataset.seen=1; setTimeout(()=>counters(s),350);} }
+      else s.classList.remove('on');
+    });
+  }
+  function go(n){ if(lock)return; i=Math.max(0,Math.min(total-1,n)); lock=true; render(); setTimeout(()=>lock=false,720); }
+  window.go=go;
+  document.getElementById('next').onclick=()=>go(i+1);
+  document.getElementById('prev').onclick=()=>go(i-1);
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')  {e.preventDefault();go(i+1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(i-1);}
+    else if(e.key==='Home')go(0); else if(e.key==='End')go(total-1);
+    else if(e.key.toLowerCase()==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+  });
+  // wheel (horizontal intent / big vertical)
+  let wt=0;
+  document.getElementById('deck').addEventListener('wheel',e=>{
+    const sl=slides[i];
+    const scrollable=sl.scrollHeight>sl.clientHeight+4;
+    if(scrollable){ // let it scroll unless at edge
+      const atTop=sl.scrollTop<=0, atBot=sl.scrollTop+sl.clientHeight>=sl.scrollHeight-2;
+      if(!( (e.deltaY>0&&atBot)||(e.deltaY<0&&atTop) )) return;
+    }
+    if(Date.now()-wt<700)return; const d=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;
+    if(Math.abs(d)<18)return; wt=Date.now(); go(i+(d>0?1:-1));
+  },{passive:true});
+  // touch
+  let sx=0,sy=0;
+  document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))go(i+(dx<0?1:-1));},{passive:true});
+
+  render();
+})();
+</script>
+</body>
+</html>
