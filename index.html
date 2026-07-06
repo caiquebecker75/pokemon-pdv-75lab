@@ -63,7 +63,7 @@ body.hasmouse #spot{opacity:1}
 .h-xl{font-size:clamp(56px,13vw,220px)}
 .h-lg{font-size:clamp(44px,9vw,150px)}
 .h-md{font-size:clamp(34px,6vw,92px)}
-.stroke{color:transparent;-webkit-text-stroke:1.6px var(--ink)}
+.stroke{color:transparent;-webkit-text-fill-color:transparent;-webkit-text-stroke:1.6px var(--ink)}
 .stroke.lime{-webkit-text-stroke-color:var(--lime)}
 .lime{color:var(--lime)} .ink{color:var(--ink)} .mut{color:var(--muted)}
 .grotesk{font-family:'Space Grotesk'}
@@ -227,6 +227,35 @@ body.hasmouse #spot{opacity:1}
   align-items:center;flex-wrap:wrap;gap:16px}
 .foot .lg{font-family:'Space Grotesk';font-weight:700;font-size:22px;display:flex;align-items:center;gap:10px}
 .foot .lg b{background:var(--ink);color:var(--bg);padding:3px 9px;border-radius:8px}
+
+/* peças entregues */
+.modlabel{display:flex;align-items:baseline;gap:14px;margin:44px 0 16px}
+.modlabel .mn{font-family:'Anton';font-size:clamp(20px,2.4vw,30px);color:transparent;-webkit-text-stroke:1.3px var(--lime);text-transform:uppercase}
+.modlabel .ms{color:var(--muted);font-size:13px}
+.pcard{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.pcard .pimg{aspect-ratio:4/3;background:#0c0d0b;display:grid;place-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
+.pcard .pimg img{width:100%;height:100%;object-fit:contain;transition:.6s ease}
+.pcard:hover .pimg img{transform:scale(1.05)}
+.pcard figcaption{padding:16px 18px}
+.pcard figcaption h4{font-family:'Space Grotesk';font-weight:700;font-size:clamp(17px,1.9vw,22px)}
+.pcard figcaption p{color:var(--muted);font-size:13px;margin-top:5px;line-height:1.45}
+.pcard .tag{position:absolute;top:12px;left:12px;z-index:2;font-family:'Space Grotesk';font-weight:700;font-size:11px;
+  letter-spacing:.08em;text-transform:uppercase;color:#0a0b09;background:var(--lime);padding:5px 11px;border-radius:100px}
+.pfull{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:21/9;margin-bottom:30px;border:1px solid var(--line)}
+.pfull img{width:100%;height:100%;object-fit:cover}
+.pfull .ov{position:absolute;left:0;bottom:0;right:0;padding:60px 30px 26px;
+  background:linear-gradient(transparent,rgba(8,9,7,.9))}
+.pfull .ov h3{font-family:'Space Grotesk';font-weight:700;font-size:clamp(22px,3vw,40px)}
+.pfull .ov p{color:var(--muted);font-size:14px;margin-top:4px;max-width:52ch}
+@media(max-width:820px){.pfull{aspect-ratio:4/3}}
+
+/* toggle idioma */
+.lang{position:fixed;top:16px;right:clamp(18px,4vw,44px);z-index:75;display:flex;align-items:center;
+  border:1px solid var(--line2);border-radius:100px;background:rgba(21,23,15,.75);backdrop-filter:blur(10px);overflow:hidden}
+.lang button{border:0;background:transparent;color:var(--muted);font-family:'Space Grotesk';font-weight:700;
+  font-size:13px;letter-spacing:.05em;padding:9px 16px;cursor:pointer;transition:.2s}
+.lang button.on{background:var(--lime);color:#0a0b09}
+.lang button:not(.on):hover{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -244,6 +273,7 @@ body.hasmouse #spot{opacity:1}
 <div id="spot"></div>
 <div class="prog" id="prog"></div>
 <div class="mark"><b>75</b> LAB <span>· Pokémon PDV</span></div>
+<div class="lang" id="lang"><button data-l="pt" class="on">PT</button><button data-l="en">EN</button></div>
 <button class="tostop" id="tostop" title="Voltar ao topo">↑</button>
 
 <!-- ========================= HERO ========================= -->
@@ -521,15 +551,46 @@ body.hasmouse #spot{opacity:1}
  <div class="tile" r data-d="4"><span class="chip on" style="margin-bottom:12px">Cross-sell</span><p class="tiny">Faixa TCG + licenciado · shelftalker · cubos de personagem</p></div>
  <div class="tile" r data-d="5"><span class="chip on" style="margin-bottom:12px">Premium</span><p class="tiny">Parede conceito · portal · backdrop · ilha · vitrine</p></div>
  </div>
- <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px" r>
- <span class="eyebrow" style="color:var(--lime)">✦ Espaço reservado</span>
- <span class="tiny"> os mockups das peças entram aqui assim que você enviar</span>
  </div>
- <div class="grid g4" r>
- <div class="slot"><div><div style="font-size:30px">＋</div><div class="grotesk" style="font-weight:700;font-size:14px;letter-spacing:.05em;margin-top:4px">PEÇA EM BREVE</div></div></div>
- <div class="slot"><div><div style="font-size:30px">＋</div><div class="grotesk" style="font-weight:700;font-size:14px;letter-spacing:.05em;margin-top:4px">PEÇA EM BREVE</div></div></div>
- <div class="slot"><div><div style="font-size:30px">＋</div><div class="grotesk" style="font-weight:700;font-size:14px;letter-spacing:.05em;margin-top:4px">PEÇA EM BREVE</div></div></div>
- <div class="slot"><div><div style="font-size:30px">＋</div><div class="grotesk" style="font-weight:700;font-size:14px;letter-spacing:.05em;margin-top:4px">PEÇA EM BREVE</div></div></div>
+</section>
+
+<!-- ========================= AS PEÇAS ENTREGUES ========================= -->
+<section class="act">
+ <div class="wrap">
+ <div class="eyebrow" r>As peças, no ponto de venda <span class="idx">/ 13</span></div>
+ <h2 class="mega h-md" r data-d="1" style="margin:16px 0 14px">Do racional <span class="lime">à prateleira</span></h2>
+ <p class="lead" r data-d="2" style="margin-bottom:8px">Uma identidade institucional do Pokémon Trading Card Game, em vermelho de alto impacto no varejo, com personagens icônicos e textura de movimento, versátil para acompanhar cada expansão sem se tornar datada</p>
+ </div>
+
+ <div class="wrap" style="margin-top:26px">
+ <div class="pfull" r>
+ <img loading="lazy" src="assets/pecas/espaco-treinador-loja.jpg" alt="Espaço Treinador na loja">
+ <div class="ov"><h3 class="lime">Espaço Treinador</h3><p>A estação de experiência infantil: base dos treinadores, portal e interação que conduz a criança até o produto</p></div>
+ </div>
+
+ <div class="modlabel" r><span class="mn">Impulso</span><span class="ms">Papelaria, checkout e corredores de alto fluxo</span></div>
+ <div class="grid g3">
+ <figure class="pcard tile" r data-d="1"><span class="tag">Impulso</span><div class="pimg"><img loading="lazy" src="assets/pecas/clip-strip.jpg" alt="Clip Strip"></div><figcaption><h4>Clip Strip</h4><p>Booster em compra rápida no corredor e no checkout</p></figcaption></figure>
+ <figure class="pcard tile" r data-d="2"><span class="tag">Impulso</span><div class="pimg"><img loading="lazy" src="assets/pecas/display-balcao.jpg" alt="Display Balcão"></div><figcaption><h4>Display Balcão</h4><p>Boosters organizados no balcão para a compra por impulso</p></figcaption></figure>
+ <figure class="pcard tile" r data-d="3"><span class="tag">Impulso</span><div class="pimg"><img loading="lazy" src="assets/pecas/stopper.jpg" alt="Stopper"></div><figcaption><h4>Stopper</h4><p>Sinaliza e chama na gôndola: sua jornada começa aqui</p></figcaption></figure>
+ </div>
+
+ <div class="modlabel" r><span class="mn">Experiência</span><span class="ms">Loja de brinquedo e varejo com espaço</span></div>
+ <div class="grid g2">
+ <figure class="pcard tile" r data-d="1"><span class="tag">Experiência</span><div class="pimg"><img loading="lazy" src="assets/pecas/espaco-treinador.jpg" alt="Espaço Treinador"></div><figcaption><h4>Espaço Treinador</h4><p>Portal base dos treinadores, missão lúdica e estação interativa</p></figcaption></figure>
+ <figure class="pcard tile" r data-d="2"><span class="tag">Experiência</span><div class="pimg"><img loading="lazy" src="assets/pecas/floor-decal.jpg" alt="Floor Decal"></div><figcaption><h4>Floor Decal</h4><p>O chão do corredor vira convite: sua jornada começa aqui</p></figcaption></figure>
+ </div>
+
+ <div class="modlabel" r><span class="mn">Especialista</span><span class="ms">Lojas TCG, anime e balcões consultivos</span></div>
+ <div class="grid g2">
+ <figure class="pcard tile" r data-d="1"><span class="tag">Especialista</span><div class="pimg"><img loading="lazy" src="assets/pecas/tapete-demo.jpg" alt="Tapete Demo"></div><figcaption><h4>Tapete Demo</h4><p>Tapete de batalha para demonstração e ritual no balcão consultivo</p></figcaption></figure>
+ <figure class="pcard tile" r data-d="2"><span class="tag">Contexto</span><div class="pimg"><img loading="lazy" src="assets/pecas/ctx-rihappy.jpg" alt="Peças em loja"></div><figcaption><h4>Em loja</h4><p>As peças em contexto real de varejo, conduzindo a jornada de compra</p></figcaption></figure>
+ </div>
+
+ <div class="modlabel" r><span class="mn">Cross-sell</span><span class="ms">Áreas com pelúcias, figures e licenciados</span></div>
+ <div class="grid g2">
+ <figure class="pcard tile" r data-d="1"><span class="tag">Cross-sell</span><div class="pimg"><img loading="lazy" src="assets/pecas/cubo.jpg" alt="Cubo"></div><figcaption><h4>Cubo</h4><p>Conecta personagem e jogo, pelúcia e figure ao lado do TCG</p></figcaption></figure>
+ <figure class="pcard tile" r data-d="2"><span class="tag">Cross-sell</span><div class="pimg"><img loading="lazy" src="assets/pecas/placa.jpg" alt="Placa Sinalizadora"></div><figcaption><h4>Placa Sinalizadora</h4><p>Sinalização base dos treinadores para orientar dentro da loja</p></figcaption></figure>
  </div>
  </div>
 </section>
@@ -537,7 +598,7 @@ body.hasmouse #spot{opacity:1}
 <!-- ========================= PLANOGRAMA ========================= -->
 <section class="act">
  <div class="wrap">
- <div class="eyebrow" r>Planograma · escada de decisão <span class="idx">/ 13</span></div>
+ <div class="eyebrow" r>Planograma · escada de decisão <span class="idx">/ 14</span></div>
  <h2 class="mega h-md" r data-d="1" style="margin:16px 0 24px">Cada altura, <span class="lime">um público</span></h2>
  <div class="ladder" style="max-width:920px">
  <div class="l" style="--sc:#c2f53f" r><span class="e">👑</span><div><h4>Topo testeira e personagem</h4><p>Mensagem de jornada, visível de longe</p></div></div>
@@ -555,7 +616,7 @@ body.hasmouse #spot{opacity:1}
 <!-- ========================= O PLANO (cronograma + KPIs) ========================= -->
 <section class="act">
  <div class="wrap">
- <div class="eyebrow" r>Do diagnóstico ao rollout <span class="idx">/ 14</span></div>
+ <div class="eyebrow" r>Do diagnóstico ao rollout <span class="idx">/ 15</span></div>
  <h2 class="mega h-md" r data-d="1" style="margin:16px 0 30px">O <span class="lime">plano</span> de trabalho</h2>
  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(24px,5vw,64px);align-items:start" class="pl2">
  <div class="tl" r>
@@ -665,5 +726,38 @@ body.hasmouse #spot{opacity:1}
   onScroll();
 })();
 </script>
+
+<script>
+(function(){
+  const DICT={"· Pokémon PDV": "· Pokémon POS", "Análise de potencial em PDV 2026": "Point-of-sale potential analysis 2026", "Transformar a presença de Pokémon no ponto de venda em uma": "Turning Pokémon's presence at the point of sale into a", "jornada de compra": "purchase journey", "fácil de começar, divertida de descobrir e recorrente de colecionar": "easy to start, fun to discover and recurring to collect", "role para começar": "scroll to start", "69 lojas visitadas": "69 stores visited", "8 a 12 anos": "ages 8 to 12", "Compra por impulso": "Impulse buying", "A tese": "The thesis", "O ponto de partida": "The starting point", "lojas": "stores", "Registros de campo": "Field records", "Fotos reais em lojas de brinquedo, varejo, papelarias, geek e especialistas TCG a base de todo o diagnóstico": "Real photos in toy, retail, stationery, geek and TCG specialist stores, the base of the whole diagnosis", "a": "to", "A idade que decide": "The deciding age", "Crianças em plena descoberta mais o": "Kids in full discovery, plus the", "adulto comprador": "adult buyer", "que precisa entender em segundos o que levar": "who needs to grasp in seconds what to buy", "Públicos ao mesmo tempo": "Audiences at once", "A venda passa pela": "The sale runs through the", "criança": "child", ", pelo": ", the", "adulto": "adult", "e, nas especialistas, pelo": "and, in specialty stores, the", "vendedor": "salesperson", "Etapas da jornada": "Journey stages", "Do \"começar\" ao \"colecionar\" a arquitetura que organiza a compra em passos simples e adaptáveis por canal": "From \"start\" to \"collect\", the architecture that organizes the purchase into simple steps, adaptable by channel", "Diagnóstico": "Diagnosis", "Produto": "Product", "disponível": "available", "não experiência": "not experience", "orientada": "guided", "É reconhecível, mas não está organizado como jornada O TCG tem barreira de categoria e vantagens únicas: surpresa, coleção, socialização e ritual de abertura O PDV precisa amplificar isso": "It is recognizable, but not organized as a journey The TCG has a category barrier and unique advantages: surprise, collection, socializing and the opening ritual The point of sale must amplify that", "Visível, pouco explicado": "Visible, poorly explained", "A criança nova e o adulto não sabem por onde começar": "The new kid and the adult don't know where to start", "Presença sem hierarquia": "Presence without hierarchy", "Boxes, boosters, decks e licenciados aparecem misturados": "Boxes, boosters, decks and licensed goods appear mixed together", "Território disputado": "Contested territory", "Nerf, Funko, Copag e Lorcana já ocupam lógicas claras": "Nerf, Funko, Copag and Lorcana already own clear logics", "Evidências de campo": "Field evidence", "O que os": "What the", "PDVs reais": "real stores", "mostram": "show", "Display proprietário": "Proprietary display", "Ambiente temático": "Themed environment", "Balcão especialista": "Specialist counter", "Território Nerf": "Nerf territory", "Microimpulso papelaria": "Stationery micro-impulse", "Cultura geek/anime": "Geek/anime culture", "Vitrine premium": "Premium showcase", "Entrada Ri Happy": "Ri Happy entrance", "Balcão consultivo": "Advisory counter", "Comunidade TCG": "TCG community", "Atendimento pro": "Pro service", "Gôndola licenciada": "Licensed shelf", "Display em fluxo": "Display in the flow", "Parede especialista": "Specialist wall", "5 achados, 5 respostas": "5 findings, 5 answers", "Cada barreira vira": "Every barrier becomes", "movimento": "a move", "Produto visível, pouco explicado": "Product visible, poorly explained", "Não fica claro por onde começar": "It's not clear where to start", "Sinalização por níveis": "Signage by levels", "Comece Aqui · Booster · Coleção · Batalha · Presente": "Start Here · Booster · Collection · Battle · Gift", "Display proprietário sem jornada": "Proprietary display without a journey", "Dá presença, mas não ensina": "It gives presence, but doesn't teach", "Retrofit do display": "Display retrofit", "Testeira, régua, QR, wobbler e hierarquia de SKUs": "Header, rail, QR, wobbler and SKU hierarchy", "Concorrentes fortes por território": "Strong competitors by territory", "Nerf, Funko, Copag e Lorcana": "Nerf, Funko, Copag and Lorcana", "Território Pokémon por canal": "Pokémon territory by channel", "Não apenas peças avulsas soltas": "Not just loose standalone pieces", "Papelaria e checkout subusados": "Stationery and checkout underused", "Compra pequena e recorrente": "Small, recurring purchase", "Microdisplay + clip strip": "Micro-display + clip strip", "Comunicação de \"nova descoberta\"": "\"New discovery\" messaging", "Especialista com excesso de opções": "Specialist with too many options", "O atendimento vira o ponto crítico": "Service becomes the critical point", "Balcão do Professor Pokémon": "Professor Pokémon Counter", "Guia, vitrine orientada e acessórios pós-compra": "Guide, guided showcase and post-purchase accessories", "Clusterização de loja": "Store clustering", "2 eixos,": "2 axes,", "4 territórios": "4 territories", "Todo canal se posiciona entre": "Every channel sits between", "comprar ↔ jogar": "buy ↔ play", "generalista ↔ especialista": "generalist ↔ specialist", "Cada quadrante pede um kit de trade diferente": "Each quadrant needs a different trade kit", "↑ Jogar": "↑ Play", "Comprar ↓": "Buy ↓", "Especialista · Jogar": "Specialist · Play", "Comunidade, torneio e recorrência": "Community, tournament and recurrence", "Online · Liga": "Online · League", "Generalista · Jogar": "Generalist · Play", "Descoberta e primeira batalha": "Discovery and first battle", "Online · Batalha": "Online · Battle", "Especialista · Comprar": "Specialist · Buy", "Coleção, vitrine e cartas premium": "Collection, showcase and premium cards", "Generalista · Comprar": "Generalist · Buy", "Capilaridade, impulso e volume": "Reach, impulse and volume", "Online · Compra": "Online · Buy", "← Generalista": "← Generalist", "Especialista →": "Specialist →", "Leitura por canal": "Reading by channel", "5 canais,": "5 channels,", "5 missões": "5 missions", "Brinquedo · Ri Happy": "Toy · Ri Happy", "Transformar Pokémon em": "Turn Pokémon into a", "missão visual": "visual mission", "Estação do Treinador, portal e cross-sell com pelúcias": "Trainer Station, portal and cross-sell with plush", "Papelaria": "Stationery", "Leitura em": "Readable in", "segundos": "seconds", ", sem atendimento Clip strip, display de balcão e mensagem de descoberta": ", no assistance Clip strip, counter display and discovery message", "Varejo · gôndola": "Retail · shelf", "Hierarquia no ruído visual": "Hierarchy amid visual noise", "Régua por nível": "Rail by level", ", testeira e planograma por etapa": ", header and planogram by stage", "Geek · licenciados": "Geek · licensed", "Conectar personagem e jogo": "Connect character and game", "\"Escolha seu parceiro\"": "\"Choose your partner\"", ": pelúcia + booster, figure + box": ": plush + booster, figure + box", "Especialista · TCG": "Specialist · TCG", "Atendimento consultivo e recorrência": "Advisory service and recurrence", "Balcão do Professor": "Professor Counter", ", demo e ritual de abertura": ", demo and opening ritual", "Quem decide a compra": "Who decides the purchase", "A venda passa por": "The sale runs through", "4 pessoas": "4 people", "Criança iniciante": "Beginner kid", "Não sabe o que é booster nem como jogar": "Doesn't know what a booster is or how to play", "\"Comece sua jornada.\"": "\"Start your journey\"", "Criança fã": "Fan kid", "Pode se perder na variedade de SKUs": "Can get lost in the variety of SKUs", "\"Evolua sua coleção.\"": "\"Evolve your collection\"", "Adulto comprador": "Adult buyer", "Não diferencia entrada, coleção e jogo": "Can't tell entry, collection and game apart", "\"Começar / presentear / jogar.\"": "\"Start / gift / play\"", "Vendedor": "Salesperson", "Traduz o portfólio em segundos": "Translates the portfolio in seconds", "\"Começar, colecionar ou jogar?\"": "\"Start, collect or play?\"", "A plataforma": "The platform", "A Jornada do": "The Trainer's", "Treinador": "Journey", "role para percorrer as 6 etapas →": "scroll through the 6 stages →", "Comece Aqui": "Start Here", "Seu primeiro passo como Treinador Battle Academy, decks de entrada, QR tutorial": "Your first step as a Trainer Battle Academy, entry decks, QR tutorial", "Escolha seu Pokémon": "Choose your Pokémon", "Qual parceiro combina com você? Pelúcias, figures, Pokébolas": "Which partner suits you? Plush, figures, Poké Balls", "Abra uma Descoberta": "Open a Discovery", "Sua próxima carta pode estar aqui Booster, clip strip, checkout": "Your next card could be here Booster, clip strip, checkout", "Monte seu Time": "Build your Team", "Colecione, troque e evolua Boxes, coleções, pastas, sleeves": "Collect, trade and evolve Boxes, collections, binders, sleeves", "Batalhe com Amigos": "Battle with Friends", "Aprenda, desafie e jogue Mesa demo, tapete, agenda de batalhas": "Learn, challenge and play Demo table, mat, battle schedule", "Proteja sua Coleção": "Protect your Collection", "Cartas especiais merecem proteção Sleeves, top loaders, vitrine premium": "Special cards deserve protection Sleeves, top loaders, premium showcase", "Ordem de ataque": "Order of attack", "O que vem": "What comes", "primeiro": "first", "Régua de navegação por nível": "Navigation rail by level", "Resolve o problema estrutural: excesso de SKUs sem hierarquia": "Solves the structural problem: too many SKUs with no hierarchy", "Impacto alto": "High impact", "Retrofit do display proprietário": "Proprietary display retrofit", "Aproveita o investimento existente e vira jornada": "Reuses the existing investment and becomes a journey", "Rápido": "Fast", "Microimpulso papelaria / checkout": "Stationery / checkout micro-impulse", "Alta capilaridade e baixo custo por ponto": "High reach and low cost per point", "Capilar": "Reach", "Estação do Treinador": "Trainer Station", "Experiência infantil e cross-sell na loja de brinquedo": "Kids' experience and cross-sell in the toy store", "Experiência": "Experience", "Qualifica atendimento, aumenta ticket, fortalece comunidade": "Improves service, raises ticket, strengthens community", "Cross-sell TCG + licenciados": "Cross-sell TCG + licensed", "Eleva ticket médio e conecta personagem com jogo": "Raises average ticket and links character to game", "Como se monta": "How it's built", "5 módulos": "5 modules", "plugáveis": "pluggable", "Impulso": "Impulse", "Clip strip, display de balcão, stopper": "Clip strip, counter display, stopper", "Experiência infantil": "Kids' experience", "Estação do Treinador, portal, floor decal": "Trainer Station, portal, floor decal", "Especialista": "Specialist", "Balcão do Professor, tapete demo, agenda": "Professor Counter, demo mat, schedule", "Licenciados + TCG": "Licensed + TCG", "Faixas de combo, shelftalker, selo parceiro": "Combo bands, shelf-talker, partner seal", "Premium / Launch": "Premium / Launch", "Parede conceito, ilha, backdrop, opening": "Concept wall, island, backdrop, opening", "O que a concorrência ensina": "What the competition teaches", "competitivo": "competitive", "Território": "Territory", "Território de brincadeira → Estação do Treinador com missão e batalha": "Play territory → Trainer Station with mission and battle", "Coleção": "Collection", "Desejo por personagem → \"Escolha seu Pokémon\" e cross-sell": "Character desire → \"Choose your Pokémon\" and cross-sell", "Impulso em clip strip → booster no balcão e checkout": "Impulse in clip strip → booster at counter and checkout", "Categoria": "Category", "Sinalização própria de TCG → onboarding de novos jogadores": "Own TCG signage → onboarding new players", "Ritual": "Ritual", "Surpresa como ritual → visibilidade para a abertura do booster": "Surprise as ritual → visibility for the booster opening", "Simples": "Simple", "Colecionismo simples → linguagem de booster acessível": "Simple collecting → accessible booster language", "Dinâmicas de ativação": "Activation mechanics", "6 formas de": "6 ways to", "colocar em jogo": "put it in play", "Missão Primeiro Treinador": "First Trainer Mission", "QR em 3 passos: escolher, abrir, jogar Educação e trial": "QR in 3 steps: choose, open, play Education and trial", "Abertura da Sorte": "Lucky Opening", "Abrir booster no balcão, lógica de gashapon Ritual e emoção": "Open a booster at the counter, gashapon logic Ritual and emotion", "Vendedor orienta por perfil Conversão consultiva": "Salesperson guides by profile Advisory conversion", "Escolha seu Parceiro": "Choose your Partner", "Pelúcia + booster, figure + box Cross-sell e presente": "Plush + booster, figure + box Cross-sell and gift", "Dia de Batalha": "Battle Day", "Agenda semanal de partidas rápidas Comunidade": "Weekly schedule of quick matches Community", "Volta às Aulas": "Back to School", "Microimpulso em papelaria conectando booster a recompensa": "Stationery micro-impulse linking booster to reward", "Cotação em camadas": "Layered quoting", "5 camadas de": "5 layers of", "peças": "pieces", "Essencial": "Essential", "Régua de gôndola · stopper · wobbler · QR tutorial · mini guia": "Shelf rail · stopper · wobbler · QR tutorial · mini guide", "Clip strip · display de balcão · splash de booster": "Clip strip · counter display · booster splash", "Estação do Treinador · floor decal · totem · mesa demo": "Trainer Station · floor decal · totem · demo table", "Faixa TCG + licenciado · shelftalker · cubos de personagem": "TCG + licensed band · shelf-talker · character cubes", "Parede conceito · portal · backdrop · ilha · vitrine": "Concept wall · portal · backdrop · island · showcase", "As peças, no ponto de venda": "The pieces, at the point of sale", "Do racional": "From rationale", "à prateleira": "to the shelf", "Uma identidade institucional do Pokémon Trading Card Game, em vermelho de alto impacto no varejo, com personagens icônicos e textura de movimento, versátil para acompanhar cada expansão sem se tornar datada": "An institutional identity for the Pokémon Trading Card Game, in high-impact retail red, with iconic characters and a motion texture, versatile enough to follow each expansion without becoming dated", "Espaço Treinador": "Trainer Space", "A estação de experiência infantil: base dos treinadores, portal e interação que conduz a criança até o produto": "The kids' experience station: trainers' base, portal and interaction that guides the child to the product", "Papelaria, checkout e corredores de alto fluxo": "Stationery, checkout and high-traffic aisles", "Booster em compra rápida no corredor e no checkout": "Booster for quick buys in the aisle and at checkout", "Display Balcão": "Counter Display", "Boosters organizados no balcão para a compra por impulso": "Boosters arranged at the counter for impulse buying", "Sinaliza e chama na gôndola: sua jornada começa aqui": "Flags and grabs attention on the shelf: your journey starts here", "Loja de brinquedo e varejo com espaço": "Toy stores and retail with space", "Portal base dos treinadores, missão lúdica e estação interativa": "Trainers' base portal, playful mission and interactive station", "O chão do corredor vira convite: sua jornada começa aqui": "The aisle floor becomes an invitation: your journey starts here", "Lojas TCG, anime e balcões consultivos": "TCG, anime stores and advisory counters", "Tapete Demo": "Demo Mat", "Tapete de batalha para demonstração e ritual no balcão consultivo": "Battle mat for demo and ritual at the advisory counter", "Contexto": "Context", "Em loja": "In store", "As peças em contexto real de varejo, conduzindo a jornada de compra": "The pieces in a real retail context, guiding the purchase journey", "Áreas com pelúcias, figures e licenciados": "Areas with plush, figures and licensed goods", "Cubo": "Cube", "Conecta personagem e jogo, pelúcia e figure ao lado do TCG": "Connects character and game, plush and figure beside the TCG", "Placa Sinalizadora": "Wayfinding Sign", "Sinalização base dos treinadores para orientar dentro da loja": "Trainers' base signage to guide inside the store", "Planograma · escada de decisão": "Planogram · decision ladder", "Cada altura,": "Each height,", "um público": "one audience", "Topo testeira e personagem": "Top header and character", "Mensagem de jornada, visível de longe": "Journey message, visible from afar", "Olhos da criança boosters e entrada": "Kid's eye level boosters and entry", "Produtos de entrada e chamada de descoberta": "Entry products and discovery call", "Olhos do adulto guia de compra": "Adult's eye level buying guide", "Diferenciação por perfil e produtos presenteáveis": "Differentiation by profile and giftable products", "Base boxes e coleções especiais": "Base boxes and special collections", "SKUs de maior volume": "Higher-volume SKUs", "Balcão / vitrine premium e acessórios": "Counter / showcase premium and accessories", "Cartas especiais, sleeves, pastas e material consultivo": "Special cards, sleeves, binders and advisory material", "⚠️ Correção tática imediata": "⚠️ Immediate tactical fix", "nunca colocar etiqueta de preço sobre personagem ou logo Usar porta-preço externo, régua de preço ou tag suspensa padronizada": "never place a price tag over a character or logo Use an external price holder, price rail or a standardized hanging tag", "Do diagnóstico ao rollout": "From diagnosis to rollout", "O": "The", "plano": "plan", "de trabalho": "of work", "29/06 a 05/07": "Jun 29 to Jul 5", "Diagnóstico e estratégia": "Diagnosis and strategy", "06 a 12/07": "Jul 6 to 12", "Dinâmica e desenho de peças": "Mechanics and piece design", "13 a 26/07": "Jul 13 to 26", "Criação e desdobramentos": "Creation and rollouts", "27/07 a 16/08": "Jul 27 to Aug 16", "Prototipagem e orçamento": "Prototyping and budget", "17/08 a 13/09": "Aug 17 to Sep 13", "Produção": "Production", "14 a 30/09": "Sep 14 to 30", "Piloto e ajustes": "Pilot and adjustments", "Entrega final · escala": "Final delivery · scale", "KPIs que vão medir": "KPIs that will measure", "👁️ Visibilidade": "👁️ Visibility", "Aderência de execução": "Execution compliance", "⚡ Impulso": "⚡ Impulse", "Giro de boosters": "Booster turnover", "📱 Educação": "📱 Education", "Leitura de QR/tutorial": "QR/tutorial reads", "Attach rate + licenciado": "Attach rate + licensed", "🎫 Comunidade": "🎫 Community", "Participação em demos": "Demo participation", "Ticket médio TCG": "Average TCG ticket", "Recomendação final": "Final recommendation", "não uma": "not a", "campanha": "one-size", "única": "fits-all", "rígida": "campaign", "Começar por um": "Start with an", "pacote essencial": "essential package", "de rápida implementação e, em paralelo, um": "for fast rollout and, in parallel, an", "piloto de experiência": "experience pilot", "em lojas-chave Escala e aprendizado ao mesmo tempo": "in key stores Scale and learning at the same time", "PRÓXIMO 01": "NEXT 01", "PRÓXIMO 02": "NEXT 02", "PRÓXIMO 03": "NEXT 03", "PRÓXIMO 04": "NEXT 04", "Validar SKUs de entrada, presente, coleção, batalha e premium": "Validate entry, gift, collection, battle and premium SKUs", "Definir lojas piloto por canal": "Define pilot stores by channel", "Levantar medidas reais de display e gôndola": "Measure real display and shelf dimensions", "Cotar pacotes essencial, experiência e especialista": "Quote essential, experience and specialist packages", "Transformando presença em jornada ·": "Turning presence into journey ·", "Vamos jogar? 🎮": "Let's play? 🎮"};
+  const heroEN="<span class=\"clip\" style=\"display:block\"><span class=\"up\" data-d=\"1\" style=\"display:inline-block\">The Pokémon</span></span><span class=\"clip\" style=\"display:block\"><span class=\"up lime\" data-d=\"2\" style=\"display:inline-block\">Trainer’s</span></span><span class=\"clip\" style=\"display:block\"><span class=\"up stroke lime\" data-d=\"3\" style=\"display:inline-block\">Journey</span></span>", stmtEN="<span class=\"w\">Pokémon</span> <span class=\"w\">already</span> <span class=\"w\">has</span> <span class=\"w lime\">presence</span> <span class=\"w lime\">and</span> <span class=\"w lime\">desire</span> <span class=\"w\">Missing</span> <span class=\"w\">is</span> <span class=\"w stroke\">method,</span> <span class=\"w stroke\">hierarchy</span> <span class=\"w\">and</span> <span class=\"w\">dynamics</span>";
+  const hero=document.querySelector('.hero h1');
+  const stmt=document.querySelector('.stmt');
+  const heroPT=hero?hero.innerHTML:'', stmtPT=stmt?stmt.innerHTML:'';
+  function skip(el){while(el){if(el.nodeType===1){var t=el.tagName;
+    if(t==='SCRIPT'||t==='STYLE')return true;
+    if(el===hero||el===stmt)return true;
+    if(el.hasAttribute&&el.hasAttribute('data-count'))return true;
+    if(el.classList&&el.classList.contains('lang'))return true;}
+    el=el.parentNode;}return false;}
+  const nodes=[];
+  const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){
+    return (n.nodeValue&&n.nodeValue.trim()&&!skip(n.parentNode))?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;}});
+  let n; while(n=w.nextNode()){n.__pt=n.nodeValue;nodes.push(n);}
+  const tostop=document.getElementById('tostop');
+  function setLang(l){
+    const en=l==='en';
+    nodes.forEach(function(nd){var pt=nd.__pt,k=pt.trim();
+      nd.nodeValue=(en&&DICT[k]!=null)?pt.replace(k,DICT[k]):pt;});
+    if(hero){hero.innerHTML=en?heroEN:heroPT;hero.querySelectorAll('.clip').forEach(function(c){c.classList.add('in');});}
+    if(stmt){stmt.innerHTML=en?stmtEN:stmtPT;stmt.classList.add('in');}
+    if(tostop)tostop.title=en?'Back to top':'Voltar ao topo';
+    document.documentElement.lang=en?'en':'pt-BR';
+    document.querySelectorAll('#lang button').forEach(function(b){b.classList.toggle('on',b.dataset.l===l);});
+  }
+  document.querySelectorAll('#lang button').forEach(function(b){b.onclick=function(){setLang(b.dataset.l);};});
+})();
+</script>
+
 </body>
 </html>
