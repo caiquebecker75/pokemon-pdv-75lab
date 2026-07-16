@@ -112,10 +112,11 @@ body.hasmouse #spot{opacity:1}
 .stmt.in .w{opacity:1}
 
 /* big stats — editorial empilhado */
-.stat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(20px,5vw,80px);
+.stat{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(32px,6vw,100px);
   align-items:center;padding:clamp(30px,5vh,64px) 0;border-top:1px solid var(--line)}
 .stat:last-child{border-bottom:1px solid var(--line)}
-.stat .num{font-family:'Anton';line-height:.8;font-size:clamp(84px,20vw,300px);letter-spacing:-.02em}
+.stat .meta{max-width:52ch}
+.stat .num{font-family:'Anton';line-height:.8;font-size:clamp(72px,13vw,210px);letter-spacing:-.02em}
 .stat .num.o{color:transparent;-webkit-text-stroke:2px var(--lime)}
 .stat .meta .k{font-family:'Space Grotesk';font-weight:700;font-size:clamp(18px,2.4vw,34px);margin-bottom:8px}
 @media(max-width:760px){.stat{grid-template-columns:1fr;gap:10px}.stat .num{font-size:32vw}}
@@ -418,17 +419,18 @@ body.hasmouse #spot{opacity:1}
  </div></div>
 </section>
 
-<!-- ========================= ACHADOS -> RESPOSTAS ========================= -->
+<!-- ========================= BENCHMARK ========================= -->
 <section class="act">
  <div class="wrap">
- <div class="eyebrow" r>5 achados, 5 respostas <span class="idx">/ 04</span></div>
- <h2 class="mega h-md" r data-d="1" style="margin:16px 0 30px">Cada barreira vira <span class="lime">movimento</span></h2>
- <div class="flow">
- <div class="row" r><div class="from">Produto visível, pouco explicado<p>Não fica claro por onde começar</p></div><span class="ar"><svg width="40" height="16" viewBox="0 0 40 16" fill="none"><path d="M0 8h34m0 0l-8-6m8 6l-8 6" stroke="currentColor" stroke-width="2"/></svg></span><div class="to">Sinalização por níveis<p>Comece Aqui · Booster · Coleção · Batalha · Presente</p></div></div>
- <div class="row" r><div class="from">Display proprietário sem jornada<p>Dá presença, mas não ensina</p></div><span class="ar"><svg width="40" height="16" viewBox="0 0 40 16" fill="none"><path d="M0 8h34m0 0l-8-6m8 6l-8 6" stroke="currentColor" stroke-width="2"/></svg></span><div class="to">Retrofit do display<p>Testeira, régua, QR, wobbler e hierarquia de SKUs</p></div></div>
- <div class="row" r><div class="from">Concorrentes fortes por território<p>Nerf, Funko, Copag e Lorcana</p></div><span class="ar"><svg width="40" height="16" viewBox="0 0 40 16" fill="none"><path d="M0 8h34m0 0l-8-6m8 6l-8 6" stroke="currentColor" stroke-width="2"/></svg></span><div class="to">Território Pokémon por canal<p>Não apenas peças avulsas soltas</p></div></div>
- <div class="row" r><div class="from">Papelaria e checkout subusados<p>Compra pequena e recorrente</p></div><span class="ar"><svg width="40" height="16" viewBox="0 0 40 16" fill="none"><path d="M0 8h34m0 0l-8-6m8 6l-8 6" stroke="currentColor" stroke-width="2"/></svg></span><div class="to">Microdisplay + clip strip<p>Comunicação de "nova descoberta"</p></div></div>
- <div class="row" r><div class="from">Especialista com excesso de opções<p>O atendimento vira o ponto crítico</p></div><span class="ar"><svg width="40" height="16" viewBox="0 0 40 16" fill="none"><path d="M0 8h34m0 0l-8-6m8 6l-8 6" stroke="currentColor" stroke-width="2"/></svg></span><div class="to">Balcão do Professor Pokémon<p>Guia, vitrine orientada e acessórios pós-compra</p></div></div>
+ <div class="eyebrow" r>O que a concorrência ensina <span class="idx">/ 04</span></div>
+ <h2 class="mega h-md" r data-d="1" style="margin:14px 0 20px">Benchmark <span class="lime">competitivo</span></h2>
+ <div class="grid g3">
+ <div class="tile" r data-d="1"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Nerf</b><span class="chip on" style="font-size:11px">Território</span></div><p class="tiny" style="margin-top:8px">Território de brincadeira → Estação do Treinador com missão e batalha</p></div>
+ <div class="tile" r data-d="2"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Funko</b><span class="chip on" style="font-size:11px">Coleção</span></div><p class="tiny" style="margin-top:8px">Desejo por personagem → "Escolha seu Pokémon" e cross-sell</p></div>
+ <div class="tile" r data-d="3"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Copag</b><span class="chip on" style="font-size:11px">Impulso</span></div><p class="tiny" style="margin-top:8px">Impulso em clip strip → booster no balcão e checkout</p></div>
+ <div class="tile" r data-d="1"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Lorcana</b><span class="chip on" style="font-size:11px">Categoria</span></div><p class="tiny" style="margin-top:8px">Sinalização própria de TCG → onboarding de novos jogadores</p></div>
+ <div class="tile" r data-d="2"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Gashapon</b><span class="chip on" style="font-size:11px">Ritual</span></div><p class="tiny" style="margin-top:8px">Surpresa como ritual → visibilidade para a abertura do booster</p></div>
+ <div class="tile" r data-d="3"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Topps</b><span class="chip on" style="font-size:11px">Simples</span></div><p class="tiny" style="margin-top:8px">Colecionismo simples → linguagem de booster acessível</p></div>
  </div>
  </div>
 </section>
@@ -450,10 +452,25 @@ body.hasmouse #spot{opacity:1}
  </div>
 </section>
 
+<!-- ========================= ACHADOS -> RESPOSTAS ========================= -->
+<section class="act">
+ <div class="wrap">
+ <div class="eyebrow" r>5 achados, 5 respostas <span class="idx">/ 06</span></div>
+ <h2 class="mega h-md" r data-d="1" style="margin:16px 0 30px">Cada barreira vira <span class="lime">movimento</span></h2>
+ <div class="flow">
+ <div class="row" r><div class="from">Produto visível, pouco explicado<p>Não fica claro por onde começar</p></div><span class="ar"><svg width="40" height="16" viewBox="0 0 40 16" fill="none"><path d="M0 8h34m0 0l-8-6m8 6l-8 6" stroke="currentColor" stroke-width="2"/></svg></span><div class="to">Sinalização por níveis<p>Comece Aqui · Booster · Coleção · Batalha · Presente</p></div></div>
+ <div class="row" r><div class="from">Display proprietário sem jornada<p>Dá presença, mas não ensina</p></div><span class="ar"><svg width="40" height="16" viewBox="0 0 40 16" fill="none"><path d="M0 8h34m0 0l-8-6m8 6l-8 6" stroke="currentColor" stroke-width="2"/></svg></span><div class="to">Retrofit do display<p>Testeira, régua, QR, wobbler e hierarquia de SKUs</p></div></div>
+ <div class="row" r><div class="from">Concorrentes fortes por território<p>Nerf, Funko, Copag e Lorcana</p></div><span class="ar"><svg width="40" height="16" viewBox="0 0 40 16" fill="none"><path d="M0 8h34m0 0l-8-6m8 6l-8 6" stroke="currentColor" stroke-width="2"/></svg></span><div class="to">Território Pokémon por canal<p>Não apenas peças avulsas soltas</p></div></div>
+ <div class="row" r><div class="from">Papelaria e checkout subusados<p>Compra pequena e recorrente</p></div><span class="ar"><svg width="40" height="16" viewBox="0 0 40 16" fill="none"><path d="M0 8h34m0 0l-8-6m8 6l-8 6" stroke="currentColor" stroke-width="2"/></svg></span><div class="to">Microdisplay + clip strip<p>Comunicação de "nova descoberta"</p></div></div>
+ <div class="row" r><div class="from">Especialista com excesso de opções<p>O atendimento vira o ponto crítico</p></div><span class="ar"><svg width="40" height="16" viewBox="0 0 40 16" fill="none"><path d="M0 8h34m0 0l-8-6m8 6l-8 6" stroke="currentColor" stroke-width="2"/></svg></span><div class="to">Balcão do Professor Pokémon<p>Guia, vitrine orientada e acessórios pós-compra</p></div></div>
+ </div>
+ </div>
+</section>
+
 <!-- ========================= CANAIS (magazine spreads) ========================= -->
 <section class="act">
  <div class="wrap">
- <div class="eyebrow" r>Leitura por canal <span class="idx">/ 06</span></div>
+ <div class="eyebrow" r>Leitura por canal <span class="idx">/ 07</span></div>
  <h2 class="mega h-md" r data-d="1" style="margin:16px 0 10px">5 canais, <span class="lime">5 missões</span></h2>
  <div class="spread" r>
  <div class="ph"><img loading="lazy" src="assets/fotos/rihappy_entrada.jpg" alt=""></div>
@@ -481,7 +498,7 @@ body.hasmouse #spot{opacity:1}
 <!-- ========================= PÚBLICOS ========================= -->
 <section class="act">
  <div class="wrap">
- <div class="eyebrow" r>Quem decide a compra <span class="idx">/ 07</span></div>
+ <div class="eyebrow" r>Quem decide a compra <span class="idx">/ 08</span></div>
  <h2 class="mega h-md" r data-d="1" style="margin:16px 0 30px">A venda passa por <span class="lime">4 pessoas</span></h2>
  <div class="grid g4">
  <div class="tile" r data-d="1"><div style="font-size:40px">🧒</div><h4 class="grotesk" style="font-weight:700;font-size:19px;margin:10px 0 8px">Criança iniciante</h4><p class="tiny" style="margin-bottom:12px">Não sabe o que é booster nem como jogar</p><span class="chip on" style="font-size:11.5px">"Comece sua jornada."</span></div>
@@ -496,7 +513,7 @@ body.hasmouse #spot{opacity:1}
 <section class="pin" id="pin">
  <div class="stage">
  <div class="head">
- <div class="eyebrow" r>A plataforma <span class="idx">/ 08</span></div>
+ <div class="eyebrow" r>A plataforma <span class="idx">/ 09</span></div>
  <h2 class="mega h-md" r data-d="1" style="margin-top:12px">A Jornada do <span class="lime">Treinador</span> <span class="mut" style="font-family:Inter;font-size:.28em;font-weight:600;text-transform:none"> role para percorrer as 6 etapas →</span></h2>
  </div>
  <div class="htrack" id="htrack">
@@ -506,22 +523,6 @@ body.hasmouse #spot{opacity:1}
  <div class="step" style="--sc:#bcd94a"><div class="ico">🗂️</div><div class="sn">04</div><div><h3>Monte seu Time</h3><p>Colecione, troque e evolua Boxes, coleções, pastas, sleeves</p></div></div>
  <div class="step" style="--sc:#c2f53f"><div class="ico">⚔️</div><div class="sn">05</div><div><h3>Batalhe com Amigos</h3><p>Aprenda, desafie e jogue Mesa demo, tapete, agenda de batalhas</p></div></div>
  <div class="step" style="--sc:#78dd9e"><div class="ico">🛡️</div><div class="sn">06</div><div><h3>Proteja sua Coleção</h3><p>Cartas especiais merecem proteção Sleeves, top loaders, vitrine premium</p></div></div>
- </div>
- </div>
-</section>
-
-<!-- ========================= OPORTUNIDADES (ranked) ========================= -->
-<section class="act">
- <div class="wrap">
- <div class="eyebrow" r>Ordem de ataque <span class="idx">/ 09</span></div>
- <h2 class="mega h-md" r data-d="1" style="margin:16px 0 24px">O que vem <span class="lime">primeiro</span></h2>
- <div class="rank">
- <div class="r" r><div class="n">1</div><div><div class="t">Régua de navegação por nível</div><div class="d">Resolve o problema estrutural: excesso de SKUs sem hierarquia</div></div><span class="chip on">Impacto alto</span></div>
- <div class="r" r><div class="n">2</div><div><div class="t">Retrofit do display proprietário</div><div class="d">Aproveita o investimento existente e vira jornada</div></div><span class="chip on">Rápido</span></div>
- <div class="r" r><div class="n">3</div><div><div class="t">Microimpulso papelaria / checkout</div><div class="d">Alta capilaridade e baixo custo por ponto</div></div><span class="chip on">Capilar</span></div>
- <div class="r" r><div class="n">4</div><div><div class="t">Estação do Treinador</div><div class="d">Experiência infantil e cross-sell na loja de brinquedo</div></div><span class="chip">Experiência</span></div>
- <div class="r" r><div class="n">5</div><div><div class="t">Balcão do Professor Pokémon</div><div class="d">Qualifica atendimento, aumenta ticket, fortalece comunidade</div></div><span class="chip">Ticket</span></div>
- <div class="r" r><div class="n">6</div><div><div class="t">Cross-sell TCG + licenciados</div><div class="d">Eleva ticket médio e conecta personagem com jogo</div></div><span class="chip">Ticket</span></div>
  </div>
  </div>
 </section>
@@ -537,16 +538,6 @@ body.hasmouse #spot{opacity:1}
  <div class="tile" r data-d="3"><div style="font-size:30px">🎓</div><h4 class="grotesk" style="font-weight:700;font-size:16px;margin:8px 0 6px">Especialista</h4><p class="tiny">Balcão do Professor, tapete demo, agenda</p></div>
  <div class="tile" r data-d="4"><div style="font-size:30px">🧸</div><h4 class="grotesk" style="font-weight:700;font-size:16px;margin:8px 0 6px">Licenciados + TCG</h4><p class="tiny">Faixas de combo, shelftalker, selo parceiro</p></div>
  <div class="tile" r data-d="5"><div style="font-size:30px">💎</div><h4 class="grotesk" style="font-weight:700;font-size:16px;margin:8px 0 6px">Premium / Launch</h4><p class="tiny">Parede conceito, ilha, backdrop, opening</p></div>
- </div>
- <div class="eyebrow" r>O que a concorrência ensina</div>
- <h2 class="mega h-md" r data-d="1" style="margin:14px 0 20px">Benchmark <span class="lime">competitivo</span></h2>
- <div class="grid g3">
- <div class="tile" r data-d="1"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Nerf</b><span class="chip on" style="font-size:11px">Território</span></div><p class="tiny" style="margin-top:8px">Território de brincadeira → Estação do Treinador com missão e batalha</p></div>
- <div class="tile" r data-d="2"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Funko</b><span class="chip on" style="font-size:11px">Coleção</span></div><p class="tiny" style="margin-top:8px">Desejo por personagem → "Escolha seu Pokémon" e cross-sell</p></div>
- <div class="tile" r data-d="3"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Copag</b><span class="chip on" style="font-size:11px">Impulso</span></div><p class="tiny" style="margin-top:8px">Impulso em clip strip → booster no balcão e checkout</p></div>
- <div class="tile" r data-d="1"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Lorcana</b><span class="chip on" style="font-size:11px">Categoria</span></div><p class="tiny" style="margin-top:8px">Sinalização própria de TCG → onboarding de novos jogadores</p></div>
- <div class="tile" r data-d="2"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Gashapon</b><span class="chip on" style="font-size:11px">Ritual</span></div><p class="tiny" style="margin-top:8px">Surpresa como ritual → visibilidade para a abertura do booster</p></div>
- <div class="tile" r data-d="3"><div style="display:flex;justify-content:space-between;align-items:center"><b class="grotesk" style="font-size:19px">Topps</b><span class="chip on" style="font-size:11px">Simples</span></div><p class="tiny" style="margin-top:8px">Colecionismo simples → linguagem de booster acessível</p></div>
  </div>
  </div>
 </section>
@@ -686,10 +677,26 @@ body.hasmouse #spot{opacity:1}
  </div>
 </section>
 
+<!-- ========================= OPORTUNIDADES (ranked) ========================= -->
+<section class="act">
+ <div class="wrap">
+ <div class="eyebrow" r>Ordem de ataque <span class="idx">/ 16</span></div>
+ <h2 class="mega h-md" r data-d="1" style="margin:16px 0 24px">O que vem <span class="lime">primeiro</span></h2>
+ <div class="rank">
+ <div class="r" r><div class="n">1</div><div><div class="t">Régua de navegação por nível</div><div class="d">Resolve o problema estrutural: excesso de SKUs sem hierarquia</div></div><span class="chip on">Impacto alto</span></div>
+ <div class="r" r><div class="n">2</div><div><div class="t">Retrofit do display proprietário</div><div class="d">Aproveita o investimento existente e vira jornada</div></div><span class="chip on">Rápido</span></div>
+ <div class="r" r><div class="n">3</div><div><div class="t">Microimpulso papelaria / checkout</div><div class="d">Alta capilaridade e baixo custo por ponto</div></div><span class="chip on">Capilar</span></div>
+ <div class="r" r><div class="n">4</div><div><div class="t">Estação do Treinador</div><div class="d">Experiência infantil e cross-sell na loja de brinquedo</div></div><span class="chip">Experiência</span></div>
+ <div class="r" r><div class="n">5</div><div><div class="t">Balcão do Professor Pokémon</div><div class="d">Qualifica atendimento, aumenta ticket, fortalece comunidade</div></div><span class="chip">Ticket</span></div>
+ <div class="r" r><div class="n">6</div><div><div class="t">Cross-sell TCG + licenciados</div><div class="d">Eleva ticket médio e conecta personagem com jogo</div></div><span class="chip">Ticket</span></div>
+ </div>
+ </div>
+</section>
+
 <!-- ========================= PLANOGRAMA ========================= -->
 <section class="act">
  <div class="wrap">
- <div class="eyebrow" r>Planograma · escada de decisão <span class="idx">/ 16</span></div>
+ <div class="eyebrow" r>Planograma · escada de decisão <span class="idx">/ 17</span></div>
  <h2 class="mega h-md" r data-d="1" style="margin:16px 0 24px">Cada altura, <span class="lime">um público</span></h2>
  <div class="ladder" style="max-width:920px">
  <div class="l" style="--sc:#c2f53f" r><span class="e">👑</span><div><h4>Topo testeira e personagem</h4><p>Mensagem de jornada, visível de longe</p></div></div>
@@ -707,7 +714,7 @@ body.hasmouse #spot{opacity:1}
 <!-- ========================= O PLANO (cronograma + KPIs) ========================= -->
 <section class="act">
  <div class="wrap">
- <div class="eyebrow" r>Do diagnóstico ao rollout <span class="idx">/ 17</span></div>
+ <div class="eyebrow" r>Do diagnóstico ao rollout <span class="idx">/ 18</span></div>
  <h2 class="mega h-md" r data-d="1" style="margin:16px 0 30px">O <span class="lime">plano</span> de trabalho</h2>
  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(24px,5vw,64px);align-items:start" class="pl2">
  <div class="tl" r>
